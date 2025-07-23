@@ -177,6 +177,8 @@ export default function ContactosPage() {
           onClick={openAddModal}
           style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
           title="Agregar un nuevo contacto"
+          aria-label="Agregar un nuevo contacto"
+          tabIndex={0}
         >
           Agregar contacto
         </button>
@@ -189,6 +191,8 @@ export default function ContactosPage() {
           onChange={e => { setSearch(e.target.value); setPage(1); }}
           style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid #ccc', fontSize: 15, width: 320 }}
           title="Buscar contactos"
+          aria-label="Buscar contactos"
+          tabIndex={0}
         />
       </div>
       <CustomModal
@@ -196,55 +200,63 @@ export default function ContactosPage() {
         onRequestClose={closeModal}
         title={editId ? 'Editar contacto' : 'Agregar contacto'}
       >
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }} aria-label="Formulario de contacto">
           {formError && <div style={{ color: '#dc3545', background: '#fff0f0', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formError}</div>}
           {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
-          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del contacto" />
-          <input required placeholder="Teléfono" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} title="Teléfono del contacto" />
-          <input placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} title="Email del contacto" />
-          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="ID del cliente asociado" />
-          <input placeholder="Otros datos (JSON)" value={form.otros_datos} onChange={e => setForm(f => ({ ...f, otros_datos: e.target.value }))} style={inputStyle} title="Otros datos en formato JSON" />
+          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del contacto" aria-label="Nombre del contacto" tabIndex={0} />
+          <input required placeholder="Teléfono" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} title="Teléfono del contacto" aria-label="Teléfono del contacto" tabIndex={0} />
+          <input placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} title="Email del contacto" aria-label="Email del contacto" tabIndex={0} />
+          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="ID del cliente asociado" aria-label="ID del cliente asociado" tabIndex={0} />
+          <input placeholder="Otros datos (JSON)" value={form.otros_datos} onChange={e => setForm(f => ({ ...f, otros_datos: e.target.value }))} style={inputStyle} title="Otros datos en formato JSON" aria-label="Otros datos en formato JSON" tabIndex={0} />
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" style={submitBtnStyle} disabled={loading} title={editId ? 'Actualizar contacto' : 'Agregar contacto'}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
-            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar">Cancelar</button>
+            <button type="submit" style={{...submitBtnStyle, background:'#0056b3'}} disabled={loading} title={editId ? 'Actualizar contacto' : 'Agregar contacto'} aria-label={editId ? 'Actualizar contacto' : 'Agregar contacto'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
+            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
           </div>
           {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader" style={{ border: '3px solid #eee', borderTop: '3px solid #007bff', borderRadius: '50%', width: 22, height: 22, display: 'inline-block', animation: 'spin 1s linear infinite' }}></span></div>}
         </form>
       </CustomModal>
       <div style={{ overflowX: 'auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: 16 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }} role="table" aria-label="Tabla de contactos">
           <thead>
             <tr style={{ background: '#f7f7f7' }}>
-              <th style={thStyle}>ID</th>
-              <th style={thStyle}>Nombre</th>
-              <th style={thStyle}>Teléfono</th>
-              <th style={thStyle}>Email</th>
-              <th style={thStyle}>Cliente ID</th>
-              <th style={thStyle}>Otros datos</th>
-              <th style={thStyle}>Acciones</th>
+              <th style={thStyle} scope="col">ID</th>
+              <th style={thStyle} scope="col">Nombre</th>
+              <th style={thStyle} scope="col">Teléfono</th>
+              <th style={thStyle} scope="col">Email</th>
+              <th style={thStyle} scope="col">Cliente ID</th>
+              <th style={thStyle} scope="col">Otros datos</th>
+              <th style={thStyle} scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {paged.map(c => (
-              <tr key={c.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
-                <td style={tdStyle}>{c.id}</td>
-                <td style={tdStyle}>{c.nombre}</td>
-                <td style={tdStyle}>{c.telefono}</td>
-                <td style={tdStyle}>{c.email}</td>
-                <td style={tdStyle}>{c.cliente_id}</td>
-                <td style={tdStyle}><pre style={{ margin: 0, fontSize: 13 }}>{c.otros_datos ? JSON.stringify(c.otros_datos, null, 2) : ''}</pre></td>
-                <td style={tdStyle}>
-                  <button onClick={() => openEditModal(c)} style={editBtnStyle} disabled={loading} title="Editar contacto">Editar</button>{' '}
-                  <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar contacto">Eliminar</button>
+            {paged.length === 0 ? (
+              <tr>
+                <td colSpan={7} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
+                  No hay resultados para mostrar.
                 </td>
               </tr>
-            ))}
+            ) : (
+              paged.map(c => (
+                <tr key={c.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
+                  <td style={tdStyle}>{c.id}</td>
+                  <td style={tdStyle}>{c.nombre}</td>
+                  <td style={tdStyle}>{c.telefono}</td>
+                  <td style={tdStyle}>{c.email}</td>
+                  <td style={tdStyle}>{c.cliente_id}</td>
+                  <td style={tdStyle}><pre style={{ margin: 0, fontSize: 13 }}>{c.otros_datos ? JSON.stringify(c.otros_datos, null, 2) : ''}</pre></td>
+                  <td style={tdStyle}>
+                    <button onClick={() => openEditModal(c)} style={editBtnStyle} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0}>Editar</button>{' '}
+                    <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0}>Eliminar</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior">&lt;</button>
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
           <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente">&gt;</button>
+          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
         </div>
       </div>
       <style>{`

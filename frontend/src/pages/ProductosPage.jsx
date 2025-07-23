@@ -169,6 +169,8 @@ export default function ProductosPage() {
           onClick={openAddModal}
           style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
           title="Agregar un nuevo producto"
+          aria-label="Agregar un nuevo producto"
+          tabIndex={0}
         >
           Agregar producto
         </button>
@@ -181,6 +183,8 @@ export default function ProductosPage() {
           onChange={e => { setSearch(e.target.value); setPage(1); }}
           style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid #ccc', fontSize: 15, width: 320 }}
           title="Buscar productos"
+          aria-label="Buscar productos"
+          tabIndex={0}
         />
       </div>
       <CustomModal
@@ -188,54 +192,60 @@ export default function ProductosPage() {
         onRequestClose={closeModal}
         title={editId ? 'Editar producto' : 'Agregar producto'}
       >
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }} aria-label="Formulario de producto">
           {formError && <div style={{ color: '#dc3545', background: '#fff0f0', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formError}</div>}
           {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
-          <>
-            <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del producto" />
-            <input placeholder="Descripción" value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} style={inputStyle} title="Descripción del producto" />
-            <input placeholder="Categoría" value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))} style={inputStyle} title="Categoría del producto" />
-            <input required type="number" step="0.01" placeholder="Precio" value={form.precio} onChange={e => setForm(f => ({ ...f, precio: e.target.value }))} style={inputStyle} title="Precio del producto" />
-          </>
+          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del producto" aria-label="Nombre del producto" tabIndex={0} />
+          <input placeholder="Descripción" value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} style={inputStyle} title="Descripción del producto" aria-label="Descripción del producto" tabIndex={0} />
+          <input placeholder="Categoría" value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))} style={inputStyle} title="Categoría del producto" aria-label="Categoría del producto" tabIndex={0} />
+          <input required type="number" step="0.01" placeholder="Precio" value={form.precio} onChange={e => setForm(f => ({ ...f, precio: e.target.value }))} style={inputStyle} title="Precio del producto" aria-label="Precio del producto" tabIndex={0} />
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" style={submitBtnStyle} disabled={loading} title={editId ? 'Actualizar producto' : 'Agregar producto'}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
-            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar">Cancelar</button>
+            <button type="submit" style={{...submitBtnStyle, background:'#0056b3'}} disabled={loading} title={editId ? 'Actualizar producto' : 'Agregar producto'} aria-label={editId ? 'Actualizar producto' : 'Agregar producto'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
+            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
           </div>
           {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader" style={{ border: '3px solid #eee', borderTop: '3px solid #007bff', borderRadius: '50%', width: 22, height: 22, display: 'inline-block', animation: 'spin 1s linear infinite' }}></span></div>}
         </form>
       </CustomModal>
       <div style={{ overflowX: 'auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: 16 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }} role="table" aria-label="Tabla de productos">
           <thead>
             <tr style={{ background: '#f7f7f7' }}>
-              <th style={thStyle}>ID</th>
-              <th style={thStyle}>Nombre</th>
-              <th style={thStyle}>Descripción</th>
-              <th style={thStyle}>Categoría</th>
-              <th style={thStyle}>Precio</th>
-              <th style={thStyle}>Acciones</th>
+              <th style={thStyle} scope="col">ID</th>
+              <th style={thStyle} scope="col">Nombre</th>
+              <th style={thStyle} scope="col">Descripción</th>
+              <th style={thStyle} scope="col">Categoría</th>
+              <th style={thStyle} scope="col">Precio</th>
+              <th style={thStyle} scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {paged.map(p => (
-              <tr key={p.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
-                <td style={tdStyle}>{p.id}</td>
-                <td style={tdStyle}>{p.nombre}</td>
-                <td style={tdStyle}>{p.descripcion}</td>
-                <td style={tdStyle}>{p.categoria}</td>
-                <td style={tdStyle}>{p.precio}</td>
-                <td style={tdStyle}>
-                  <button onClick={() => openEditModal(p)} style={editBtnStyle} disabled={loading} title="Editar producto">Editar</button>{' '}
-                  <button onClick={() => handleDelete(p.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar producto">Eliminar</button>
+            {paged.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
+                  No hay resultados para mostrar.
                 </td>
               </tr>
-            ))}
+            ) : (
+              paged.map(p => (
+                <tr key={p.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
+                  <td style={tdStyle}>{p.id}</td>
+                  <td style={tdStyle}>{p.nombre}</td>
+                  <td style={tdStyle}>{p.descripcion}</td>
+                  <td style={tdStyle}>{p.categoria}</td>
+                  <td style={tdStyle}>{p.precio}</td>
+                  <td style={tdStyle}>
+                    <button onClick={() => openEditModal(p)} style={editBtnStyle} disabled={loading} title="Editar producto" aria-label="Editar producto" tabIndex={0}>Editar</button>{' '}
+                    <button onClick={() => handleDelete(p.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar producto" aria-label="Eliminar producto" tabIndex={0}>Eliminar</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior">&lt;</button>
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
           <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente">&gt;</button>
+          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
         </div>
       </div>
       <style>{`
