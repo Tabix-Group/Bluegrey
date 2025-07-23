@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import ClientesPage from './pages/ClientesPage';
+import ContactosPage from './pages/ContactosPage';
+import ProductosPage from './pages/ProductosPage';
+import CronogramasPage from './pages/CronogramasPage';
+import EntregasPage from './pages/EntregasPage';
+import ModelosMensajePage from './pages/ModelosMensajePage';
 
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Router>
+      <nav style={{ margin: 10 }}>
+        <Link to="/clientes">Clientes</Link> |{' '}
+        <Link to="/contactos">Contactos</Link> |{' '}
+        <Link to="/productos">Productos</Link> |{' '}
+        <Link to="/cronogramas">Cronogramas</Link> |{' '}
+        <Link to="/entregas">Entregas</Link> |{' '}
+        <Link to="/modelos-mensaje">Modelos de Mensaje</Link>
+      </nav>
+      <Routes>
+        <Route path="/clientes" element={<ClientesPage />} />
+        <Route path="/contactos" element={<ContactosPage />} />
+        <Route path="/productos" element={<ProductosPage />} />
+        <Route path="/cronogramas" element={<CronogramasPage />} />
+        <Route path="/entregas" element={<EntregasPage />} />
+        <Route path="/modelos-mensaje" element={<ModelosMensajePage />} />
+        <Route path="*" element={<ClientesPage />} />
+      </Routes>
+    </Router>
+  );
 }
-
-export default App
