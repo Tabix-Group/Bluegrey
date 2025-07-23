@@ -1,5 +1,4 @@
-const { Pool } = require('pg');
-const pool = require('../config/db');
+import pool from './db.js';
 
 const Usuarios = {
   async getAll({ search = '', page = 1, limit = 10 }) {
@@ -42,4 +41,4 @@ const Usuarios = {
   },
 };
 
-module.exports = Usuarios;
+export default Usuarios;

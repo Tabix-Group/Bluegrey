@@ -1,10 +1,8 @@
-const { Pool } = require('pg');
-const pool = require('../config/db');
+import pool from '../models/db.js';
+import Usuarios from '../models/usuarios.js';
 
 // Obtener todos los usuarios
-const Usuarios = require('../models/usuarios');
-
-exports.getUsuarios = async (req, res) => {
+export const getUsuarios = async (req, res) => {
   try {
     const { search = '', page = 1, limit = 10 } = req.query;
     const result = await Usuarios.getAll({ search, page: Number(page), limit: Number(limit) });
@@ -14,7 +12,7 @@ exports.getUsuarios = async (req, res) => {
   }
 };
 
-exports.getUsuarioById = async (req, res) => {
+export const getUsuarioById = async (req, res) => {
   try {
     const usuario = await Usuarios.getById(req.params.id);
     if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -24,7 +22,7 @@ exports.getUsuarioById = async (req, res) => {
   }
 };
 
-exports.createUsuario = async (req, res) => {
+export const createUsuario = async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
     const nuevoUsuario = await Usuarios.create({ nombre, email, password, rol });
@@ -34,7 +32,7 @@ exports.createUsuario = async (req, res) => {
   }
 };
 
-exports.updateUsuario = async (req, res) => {
+export const updateUsuario = async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
     const usuarioActualizado = await Usuarios.update(req.params.id, { nombre, email, password, rol });
@@ -45,7 +43,7 @@ exports.updateUsuario = async (req, res) => {
   }
 };
 
-exports.deleteUsuario = async (req, res) => {
+export const deleteUsuario = async (req, res) => {
   try {
     await Usuarios.delete(req.params.id);
     res.status(204).send();
