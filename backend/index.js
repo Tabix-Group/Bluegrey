@@ -12,8 +12,6 @@ import productosRouter from './routes/productos.js';
 import cronogramasRouter from './routes/cronogramas.js';
 import entregasRouter from './routes/entregas.js';
 import modelosMensajeRouter from './routes/modelos_mensaje.js';
-import usuariosRouter from './routes/usuarios.js'; // placeholder for context
-
 // Fix for CommonJS export in usuariosRouter
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
