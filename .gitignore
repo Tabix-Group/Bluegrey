@@ -1,0 +1,96 @@
+# Node
+node_modules/
+dist/
+.env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Build
+/build/
+/.parcel-cache/
+
+# OS
+Thumbs.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Vite
+frontend/.vite/
+frontend/.cache/
+frontend/.eslintcache
+frontend/coverage/
+frontend/.sass-cache/
+frontend/.turbo/
+frontend/.next/
+frontend/.vercel/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/yarn.lock
+frontend/package-lock.json
+frontend/pnpm-lock.yaml
+frontend/npm-debug.log*
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+backend/.env.*
+
+# Backend extras
+backend/coverage/
+backend/.nyc_output/
+backend/*.sqlite
+backend/*.sqlite3
+backend/*.db
+backend/*.bak
+backend/*.log
+backend/.eslintcache
+backend/.cache/
+backend/.turbo/
+backend/.env.local
+backend/.env.development.local
+backend/.env.test.local
+backend/.env.production.local
+backend/yarn.lock
+backend/package-lock.json
+backend/pnpm-lock.yaml
+backend/npm-debug.log*
+
+# Misc
+*.local
+*.log
+
+# System
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.swn
+*.orig
+*.rej
+*.pid
+*.seed
+*.pid.lock
+*.tgz
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.backup

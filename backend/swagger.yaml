@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: WA Backend API
+  version: 1.0.0
+  description: API para gestión de clientes, contactos, productos, cronogramas y entregas automatizadas.
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /clientes:
+    get:
+      summary: Listar clientes
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear cliente
+      responses:
+        '201': { description: Creado }
+  /contactos:
+    get:
+      summary: Listar contactos
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear contacto
+      responses:
+        '201': { description: Creado }
+  /productos:
+    get:
+      summary: Listar productos
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear producto
+      responses:
+        '201': { description: Creado }
+  /cronogramas:
+    get:
+      summary: Listar cronogramas
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear cronograma
+      responses:
+        '201': { description: Creado }
+  /entregas:
+    get:
+      summary: Listar entregas
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear entrega
+      responses:
+        '201': { description: Creado }
+  /modelos-mensaje:
+    get:
+      summary: Listar modelos de mensaje
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Crear modelo de mensaje
+      responses:
+        '201': { description: Creado }
+  /cronogramas/{id}/generar-entregas:
+    post:
+      summary: Generar entregas para un cronograma
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201': { description: Entregas generadas }
+  /wa/procesar-hoy:
+    post:
+      summary: Procesar entregas pendientes de hoy
+      responses:
+        '200': { description: Mensajes enviados }
