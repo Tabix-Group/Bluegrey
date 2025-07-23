@@ -1,6 +1,6 @@
-import axios from 'axios';
 
-const API_URL = '/api/usuarios';
+import axios from 'axios';
+const API_URL = (import.meta.env.VITE_API_URL || '/api') + '/usuarios';
 
 export const getUsuarios = async (search = '', page = 1, limit = 10) => {
   const { data } = await axios.get(API_URL, { params: { search, page, limit } });
