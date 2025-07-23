@@ -1,14 +1,24 @@
 
 
-import React, { useEffect, useState } from 'react';
-import { getCronogramas, createCronograma, deleteCronograma, updateCronograma } from '../services/cronogramasService';
+// Estilos únicos (deben estar antes del componente para estar disponibles)
+import React, { useState, useEffect } from 'react';
 import CustomModal from '../components/CustomModal';
+import { getCronogramas, createCronograma, deleteCronograma, updateCronograma } from '../services/cronogramasService';
+
+
+const pageBtnStyle = { background: '#eee', color: '#333', border: 'none', borderRadius: 8, padding: '7px 16px', fontWeight: 600, fontSize: 15, cursor: 'pointer' };
 
 export default function CronogramasPage() {
   const [cronogramas, setCronogramas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ nombre: '', descripcion: '', cliente_id: '', fecha_inicio: '', recurrencia: 'diaria', activo: true });
   const [editId, setEditId] = useState(null);
+  const [formError, setFormError] = useState('');
+  const [formSuccess, setFormSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
 
   useEffect(() => {
     cargarCronogramas();
@@ -21,6 +31,8 @@ export default function CronogramasPage() {
   function openAddModal() {
     setEditId(null);
     setForm({ nombre: '', descripcion: '', cliente_id: '', fecha_inicio: '', recurrencia: 'diaria', activo: true });
+    setFormError('');
+    setFormSuccess('');
     setModalOpen(true);
   }
 
@@ -34,6 +46,8 @@ export default function CronogramasPage() {
       recurrencia: cronograma.recurrencia || 'diaria',
       activo: cronograma.activo
     });
+    setFormError('');
+    setFormSuccess('');
     setModalOpen(true);
   }
 
@@ -41,24 +55,67 @@ export default function CronogramasPage() {
     setModalOpen(false);
     setEditId(null);
     setForm({ nombre: '', descripcion: '', cliente_id: '', fecha_inicio: '', recurrencia: 'diaria', activo: true });
+    setFormError('');
+    setFormSuccess('');
+    setLoading(false);
+  }
+
+  function validateForm() {
+    if (!form.nombre.trim()) return 'El nombre es obligatorio.';
+    if (!form.cliente_id.trim() || isNaN(Number(form.cliente_id))) return 'Cliente ID es obligatorio y debe ser numérico.';
+    if (!form.fecha_inicio.trim()) return 'La fecha de inicio es obligatoria.';
+    return '';
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const data = { ...form, cliente_id: Number(form.cliente_id), activo: Boolean(form.activo) };
-    if (editId) {
-      await updateCronograma(editId, data);
-    } else {
-      await createCronograma(data);
+    setFormError('');
+    setFormSuccess('');
+    const error = validateForm();
+    if (error) {
+      setFormError(error);
+      return;
     }
-    closeModal();
-    cargarCronogramas();
+    setLoading(true);
+    try {
+      const data = { ...form, cliente_id: Number(form.cliente_id), activo: Boolean(form.activo) };
+      if (editId) {
+        await updateCronograma(editId, data);
+        setFormSuccess('Cronograma actualizado correctamente.');
+      } else {
+        await createCronograma(data);
+        setFormSuccess('Cronograma agregado correctamente.');
+      }
+      cargarCronogramas();
+      setTimeout(() => { closeModal(); }, 900);
+    } catch (err) {
+      setFormError('Ocurrió un error al guardar.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleDelete(id) {
-    await deleteCronograma(id);
-    cargarCronogramas();
+    setLoading(true);
+    try {
+      await deleteCronograma(id);
+      setFormSuccess('Cronograma eliminado.');
+      cargarCronogramas();
+    } catch {
+      setFormError('Error al eliminar.');
+    } finally {
+      setLoading(false);
+    }
   }
+
+  // Búsqueda y paginación
+  const filtered = cronogramas.filter(c =>
+    c.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
+    (c.cliente_id && String(c.cliente_id).includes(search))
+  );
+  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <div style={{ maxWidth: 1100, margin: 'auto', padding: 24 }}>
@@ -67,32 +124,46 @@ export default function CronogramasPage() {
         <button
           onClick={openAddModal}
           style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+          title="Agregar un nuevo cronograma"
         >
           Agregar cronograma
         </button>
+      </div>
+      <div style={{ marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
+        <input
+          type="text"
+          placeholder="Buscar por nombre, descripción o cliente ID..."
+          value={search}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
+          style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid #ccc', fontSize: 15, width: 320 }}
+          title="Buscar cronogramas"
+        />
       </div>
       <CustomModal
         isOpen={modalOpen}
         onRequestClose={closeModal}
         title={editId ? 'Editar cronograma' : 'Agregar cronograma'}
       >
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} />
-          <input placeholder="Descripción" value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} style={inputStyle} />
-          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} />
-          <input required type="date" placeholder="Fecha inicio" value={form.fecha_inicio} onChange={e => setForm(f => ({ ...f, fecha_inicio: e.target.value }))} style={inputStyle} />
-          <select value={form.recurrencia} onChange={e => setForm(f => ({ ...f, recurrencia: e.target.value }))} style={inputStyle}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }}>
+          {formError && <div style={{ color: '#dc3545', background: '#fff0f0', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formError}</div>}
+          {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
+          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del cronograma" />
+          <input placeholder="Descripción" value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} style={inputStyle} title="Descripción del cronograma" />
+          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="ID del cliente asociado" />
+          <input required type="date" placeholder="Fecha de inicio" value={form.fecha_inicio} onChange={e => setForm(f => ({ ...f, fecha_inicio: e.target.value }))} style={inputStyle} title="Fecha de inicio" />
+          <select value={form.recurrencia} onChange={e => setForm(f => ({ ...f, recurrencia: e.target.value }))} style={inputStyle} title="Recurrencia">
             <option value="diaria">Diaria</option>
             <option value="semanal">Semanal</option>
             <option value="mensual">Mensual</option>
           </select>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15 }} title="¿Está activo?">
             <input type="checkbox" checked={form.activo} onChange={e => setForm(f => ({ ...f, activo: e.target.checked }))} /> Activo
           </label>
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" style={submitBtnStyle}>{editId ? 'Actualizar' : 'Agregar'}</button>
-            <button type="button" onClick={closeModal} style={cancelBtnStyle}>Cancelar</button>
+            <button type="submit" style={submitBtnStyle} disabled={loading} title={editId ? 'Actualizar cronograma' : 'Agregar cronograma'}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
+            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar">Cancelar</button>
           </div>
+          {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader" style={{ border: '3px solid #eee', borderTop: '3px solid #007bff', borderRadius: '50%', width: 22, height: 22, display: 'inline-block', animation: 'spin 1s linear infinite' }}></span></div>}
         </form>
       </CustomModal>
       <div style={{ overflowX: 'auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: 16 }}>
@@ -110,7 +181,7 @@ export default function CronogramasPage() {
             </tr>
           </thead>
           <tbody>
-            {cronogramas.map(c => (
+            {paged.map(c => (
               <tr key={c.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
                 <td style={tdStyle}>{c.id}</td>
                 <td style={tdStyle}>{c.nombre}</td>
@@ -120,14 +191,22 @@ export default function CronogramasPage() {
                 <td style={tdStyle}>{c.recurrencia}</td>
                 <td style={tdStyle}>{c.activo ? 'Sí' : 'No'}</td>
                 <td style={tdStyle}>
-                  <button onClick={() => openEditModal(c)} style={editBtnStyle}>Editar</button>{' '}
-                  <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle}>Eliminar</button>
+                  <button onClick={() => openEditModal(c)} style={editBtnStyle} disabled={loading} title="Editar cronograma">Editar</button>{' '}
+                  <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar cronograma">Eliminar</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior">&lt;</button>
+          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
+          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente">&gt;</button>
+        </div>
       </div>
+      <style>{`
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }
