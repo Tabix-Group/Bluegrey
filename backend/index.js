@@ -12,6 +12,7 @@ import productosRouter from './routes/productos.js';
 import cronogramasRouter from './routes/cronogramas.js';
 import entregasRouter from './routes/entregas.js';
 import modelosMensajeRouter from './routes/modelos_mensaje.js';
+import usuariosRouter from './routes/usuarios.js';
 
 import cronogramasExtraRouter from './routes/cronogramas_extra.js';
 
@@ -37,6 +38,7 @@ app.use('/api/cronogramas', cronogramasRouter);
 app.use('/api/cronogramas', cronogramasExtraRouter);
 app.use('/api/entregas', entregasRouter);
 app.use('/api/modelos-mensaje', modelosMensajeRouter);
+app.use('/api/usuarios', usuariosRouter);
 
 app.use('/api/wa', waRouter);
 

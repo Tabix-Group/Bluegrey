@@ -208,11 +208,25 @@ export default function CronogramasPage() {
             )}
           </tbody>
         </table>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
-          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 18, gap: 8 }}>
+        <button
+          onClick={() => setPage(p => Math.max(1, p - 1))}
+          disabled={page === 1}
+          style={{ ...pageBtnStyle, background: '#eee', color: '#333', boxShadow: 'none' }}
+          title="Página anterior"
+          aria-label="Página anterior"
+          tabIndex={0}
+        >&lt;</button>
+        <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
+        <button
+          onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+          disabled={page === totalPages}
+          style={{ ...pageBtnStyle, background: '#eee', color: '#333', boxShadow: 'none' }}
+          title="Página siguiente"
+          aria-label="Página siguiente"
+          tabIndex={0}
+        >&gt;</button>
+      </div>
       </div>
       <style>{`
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
