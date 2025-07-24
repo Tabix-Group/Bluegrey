@@ -15,15 +15,19 @@ router.get('/:id', async (req, res) => {
   res.json(data);
 });
 
+
 router.post('/', async (req, res) => {
-  const { error } = clienteSchema.validate(req.body);
-  if (error) return res.status(400).json({ error: error.details[0].message });
-  const data = await Clientes.createCliente(req.body);
+  // Remove otros_datos from req.body if present
+  const { nombre, direccion, categoria } = req.body;
+  if (!nombre || !nombre.trim()) return res.status(400).json({ error: 'El nombre es obligatorio.' });
+  const data = await Clientes.createCliente({ nombre, direccion, categoria });
   res.status(201).json(data);
 });
 
+
 router.put('/:id', async (req, res) => {
-  const data = await Clientes.updateCliente(req.params.id, req.body);
+  const { nombre, direccion, categoria } = req.body;
+  const data = await Clientes.updateCliente(req.params.id, { nombre, direccion, categoria });
   res.json(data);
 });
 

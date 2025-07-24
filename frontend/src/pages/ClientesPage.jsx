@@ -6,7 +6,7 @@ import CustomModal from '../components/CustomModal';
 export default function ClientesPage() {
   const [clientes, setClientes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ nombre: '', direccion: '', categoria: '', otros_datos: '' });
+  const [form, setForm] = useState({ nombre: '', direccion: '', categoria: '' });
   const [editId, setEditId] = useState(null);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
@@ -25,7 +25,7 @@ export default function ClientesPage() {
 
   function openAddModal() {
     setEditId(null);
-    setForm({ nombre: '', direccion: '', categoria: '', otros_datos: '' });
+    setForm({ nombre: '', direccion: '', categoria: '' });
     setFormError('');
     setFormSuccess('');
     setModalOpen(true);
@@ -36,8 +36,7 @@ export default function ClientesPage() {
     setForm({
       nombre: cliente.nombre,
       direccion: cliente.direccion || '',
-      categoria: cliente.categoria || '',
-      otros_datos: cliente.otros_datos ? JSON.stringify(cliente.otros_datos) : ''
+      categoria: cliente.categoria || ''
     });
     setFormError('');
     setFormSuccess('');
@@ -47,7 +46,7 @@ export default function ClientesPage() {
   function closeModal() {
     setModalOpen(false);
     setEditId(null);
-    setForm({ nombre: '', direccion: '', categoria: '', otros_datos: '' });
+    setForm({ nombre: '', direccion: '', categoria: '' });
     setFormError('');
     setFormSuccess('');
     setLoading(false);
@@ -55,9 +54,7 @@ export default function ClientesPage() {
 
   function validateForm() {
     if (!form.nombre.trim()) return 'El nombre es obligatorio.';
-    if (form.otros_datos) {
-      try { JSON.parse(form.otros_datos); } catch { return 'Otros datos debe ser JSON válido.'; }
-    }
+    // otros_datos removed
     return '';
   }
 
@@ -72,7 +69,7 @@ export default function ClientesPage() {
     }
     setLoading(true);
     try {
-      const data = { ...form, otros_datos: form.otros_datos ? JSON.parse(form.otros_datos) : null };
+      const data = { ...form };
       if (editId) {
         await updateCliente(editId, data);
         setFormSuccess('Cliente actualizado correctamente.');
@@ -148,7 +145,6 @@ export default function ClientesPage() {
           <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del cliente" aria-label="Nombre del cliente" tabIndex={0} />
           <input placeholder="Dirección" value={form.direccion} onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} style={inputStyle} title="Dirección del cliente" aria-label="Dirección del cliente" tabIndex={0} />
           <input placeholder="Categoría" value={form.categoria} onChange={e => setForm(f => ({ ...f, categoria: e.target.value }))} style={inputStyle} title="Categoría del cliente" aria-label="Categoría del cliente" tabIndex={0} />
-          <input placeholder="Otros datos (JSON)" value={form.otros_datos} onChange={e => setForm(f => ({ ...f, otros_datos: e.target.value }))} style={inputStyle} title="Otros datos en formato JSON" aria-label="Otros datos en formato JSON" tabIndex={0} />
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <button type="submit" style={{...submitBtnStyle, background:'#0056b3'}} disabled={loading} title={editId ? 'Actualizar cliente' : 'Agregar cliente'} aria-label={editId ? 'Actualizar cliente' : 'Agregar cliente'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
             <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
@@ -182,7 +178,7 @@ export default function ClientesPage() {
                   <td style={tdStyle}>{c.nombre}</td>
                   <td style={tdStyle}>{c.direccion}</td>
                   <td style={tdStyle}>{c.categoria}</td>
-                  <td style={tdStyle}><pre style={{ margin: 0, fontSize: 13 }}>{c.otros_datos ? JSON.stringify(c.otros_datos, null, 2) : ''}</pre></td>
+      {/* otros_datos removed */}
                   <td style={tdStyle}>
                     <button onClick={() => openEditModal(c)} style={editBtnStyle} disabled={loading} title="Editar cliente" aria-label="Editar cliente" tabIndex={0}>Editar</button>{' '}
                     <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar cliente" aria-label="Eliminar cliente" tabIndex={0}>Eliminar</button>
