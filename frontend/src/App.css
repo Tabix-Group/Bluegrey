@@ -1,23 +1,59 @@
+/* --- App Root & Components - Professional High-Tech Version --- */
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--space-8);
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--space-6);
 }
 
+/* Logo Component */
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  height: 6rem;
+  padding: var(--space-6);
+  will-change: filter, transform;
+  transition: var(--transition-smooth);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
 }
 
+.logo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, transparent 40%, rgba(255,255,255,0.1) 100%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+  border-radius: inherit;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2rem var(--primary-400)) 
+          drop-shadow(0 8px 32px rgba(99, 102, 241, 0.3));
+  transform: translateY(-4px) scale(1.05);
+}
+
+.logo:hover::before {
+  opacity: 1;
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2rem #61dafb) 
+          drop-shadow(0 8px 32px rgba(97, 218, 251, 0.3));
+  transform: translateY(-4px) scale(1.05);
+}
+
+/* Logo Animation */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -27,16 +63,268 @@
   }
 }
 
+@keyframes logo-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
+  
+  .logo:not(.spinning) {
+    animation: logo-pulse 4s ease-in-out infinite;
+  }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    animation: none !important;
+  }
+}
+
+/* Card Component Override */
 .card {
-  padding: 2em;
+  padding: var(--space-8);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  margin-bottom: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
 }
 
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    var(--primary-500) 0%, 
+    var(--primary-400) 50%, 
+    var(--primary-600) 100%);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-2xl);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.card:hover::before {
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--primary-400) 0%, 
+    var(--primary-300) 50%, 
+    var(--primary-500) 100%);
+}
+
+/* Documentation Text */
 .read-the-docs {
-  color: #888;
+  color: var(--gray-500);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition: var(--transition-base);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  display: inline-block;
+  position: relative;
+}
+
+.read-the-docs::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--primary-500);
+  transition: var(--transition-base);
+  transform: translateX(-50%);
+}
+
+.read-the-docs:hover {
+  color: var(--gray-700);
+  background: var(--gray-50);
+  transform: translateY(-1px);
+}
+
+.read-the-docs:hover::before {
+  width: 100%;
+}
+
+/* App Layout Improvements */
+.app-header {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8) var(--space-6);
+  margin-bottom: var(--space-8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-lg);
+}
+
+.app-content {
+  width: 100%;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.app-footer {
+  margin-top: auto;
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--gray-200);
+  color: var(--gray-500);
+  font-size: var(--font-sm);
+}
+
+/* Interactive Elements */
+.interactive-element {
+  position: relative;
+  overflow: hidden;
+}
+
+.interactive-element::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+  transition: var(--transition-base);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.interactive-element:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  #root {
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+  
+  .logo {
+    height: 4rem;
+    padding: var(--space-4);
+  }
+  
+  .card {
+    padding: var(--space-6);
+    margin-bottom: var(--space-4);
+  }
+  
+  .app-header {
+    padding: var(--space-6) var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+  
+  .logo {
+    height: 3rem;
+    padding: var(--space-3);
+  }
+  
+  .card {
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+  }
+  
+  .read-the-docs {
+    font-size: 0.75rem;
+    padding: var(--space-1) var(--space-3);
+  }
+}
+
+/* Performance Optimizations */
+.logo,
+.card,
+.interactive-element {
+  contain: layout style paint;
+}
+
+/* High DPI Display Support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .logo {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* Dark Mode Support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .card {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(100, 116, 139, 0.2);
+  }
+  
+  .read-the-docs {
+    color: var(--gray-400);
+  }
+  
+  .read-the-docs:hover {
+    color: var(--gray-200);
+    background: rgba(51, 65, 85, 0.5);
+  }
+}
+
+/* Focus Management */
+.card:focus-within {
+  box-shadow: var(--shadow-2xl), 0 0 0 4px var(--primary-100);
+  border-color: var(--primary-300);
+}
+
+/* Loading States */
+.card.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.card.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255,255,255,0.4), 
+    transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
