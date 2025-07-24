@@ -2,7 +2,14 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import cors from 'cors';
+
 const app = express();
+app.use(cors({
+  origin: '*', // Puedes restringir a tu dominio de frontend si lo deseas
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 
 
