@@ -115,13 +115,18 @@ export default function CronogramasPage() {
   }
 
   // Búsqueda y paginación
-  const filtered = cronogramas.filter(c =>
-    c.nombre.toLowerCase().includes(search.toLowerCase()) ||
-    (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
-    (c.cliente_id && String(c.cliente_id).includes(search))
-  );
-  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
-  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+  let filtered = [];
+  let totalPages = 1;
+  let paged = [];
+  if (Array.isArray(cronogramas)) {
+    filtered = cronogramas.filter(c =>
+      c.nombre?.toLowerCase().includes(search.toLowerCase()) ||
+      (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
+      (c.cliente_id && String(c.cliente_id).includes(search))
+    );
+    totalPages = Math.ceil(filtered.length / pageSize) || 1;
+    paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+  }
 
   return (
     <div className="card card-wide">
