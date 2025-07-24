@@ -44,72 +44,13 @@ export default function ContactosPage() {
     setForm({
       nombre: contacto.nombre,
       telefono: contacto.telefono,
-    // ...existing code...
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
-        title={editId ? 'Editar contacto' : 'Agregar contacto'}
-      >
-        <form onSubmit={handleSubmit} className="modal-content" aria-label="Formulario de contacto">
-          {formError && <div className="alert-error">{formError}</div>}
-          {formSuccess && <div className="alert-success">{formSuccess}</div>}
-          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} title="Nombre del contacto" aria-label="Nombre del contacto" tabIndex={0} />
-          <input placeholder="Teléfono" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} title="Teléfono del contacto" aria-label="Teléfono del contacto" tabIndex={0} />
-          <input placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} title="Email del contacto" aria-label="Email del contacto" tabIndex={0} />
-          <select value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} title="Cliente" aria-label="Cliente" tabIndex={0} required>
-            <option value="">Seleccionar cliente</option>
-            {clientes.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-          </select>
-          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" className="btn" disabled={loading} title={editId ? 'Actualizar contacto' : 'Agregar contacto'} aria-label={editId ? 'Actualizar contacto' : 'Agregar contacto'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
-            <button type="button" className="btn" onClick={closeModal} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
-          </div>
-          {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader"></span></div>}
-        </form>
-      </CustomModal>
-      <div className="card" style={{ overflowX: 'auto', padding: 0 }}>
-        <table className="" role="table" aria-label="Tabla de contactos">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Email</th>
-              <th>Cliente</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paged.length === 0 ? (
-              <tr>
-                <td colSpan={6} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
-                  No hay resultados para mostrar.
-                </td>
-              </tr>
-            ) : (
-              paged.map(c => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{c.nombre}</td>
-                  <td>{c.telefono}</td>
-                  <td>{c.email}</td>
-                  <td>{clientes.find(cl => cl.id === c.cliente_id)?.nombre || ''}</td>
-                  <td>
-                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0}>Editar</button>{' '}
-                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0}>Eliminar</button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button className="btn" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
-          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button className="btn" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
-        </div>
-      </div>
-    </div>
-  );
+      email: contacto.email || '',
+      cliente_id: contacto.cliente_id || ''
+    });
+    setFormError('');
+    setFormSuccess('');
+    setModalOpen(true);
+  }
 }
       <div className="card" style={{ overflowX: 'auto', padding: 0 }}>
         <table className="" role="table" aria-label="Tabla de contactos">
