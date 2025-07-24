@@ -1,3 +1,21 @@
+/* Iconos del menú: sombra, transición y escala al hover */
+.menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.18s, box-shadow 0.18s, transform 0.18s;
+  box-shadow: 0 2px 8px rgba(60,60,90,0.10);
+}
+.footbar.collapsed .menu-icon {
+  filter: grayscale(0.5) opacity(0.5);
+  box-shadow: none;
+}
+.footbar a:hover .menu-icon,
+.footbar a.active .menu-icon {
+  transform: scale(1.18);
+  filter: none;
+  box-shadow: 0 4px 16px rgba(60,60,90,0.16);
+}
 /*
  * index.css — Versión con footbar (barra fija inferior) en lugar de sidebar
  * Author: Tu Nombre
