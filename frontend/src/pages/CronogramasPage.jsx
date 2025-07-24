@@ -128,8 +128,14 @@ export default function CronogramasPage() {
       totalPages = Math.ceil(filtered.length / pageSize) || 1;
       paged = filtered.slice((page - 1) * pageSize, page * pageSize);
     }
-    return { filtered, paged, totalPages };
+    // Siempre devolver arrays definidos
+    return { filtered: filtered || [], paged: paged || [], totalPages: totalPages || 1 };
   }, [cronogramas, search, page, pageSize]);
+
+  // Log defensivo para depuración
+  if (typeof window !== 'undefined') {
+    window.__DEBUG_CRONOGRAMAS_PAGED = paged;
+  }
 
   return (
     <div className="card card-wide">
@@ -206,12 +212,12 @@ export default function CronogramasPage() {
             </tr>
           </thead>
           <tbody>
-            {(Array.isArray(paged) && paged.length === 0) ? (
+            {(!Array.isArray(paged) || paged.length === 0) ? (
               <tr>
                 <td colSpan={8} className="table-cell text-center text-muted">No hay resultados para mostrar.</td>
               </tr>
             ) : (
-              (Array.isArray(paged) ? paged : []).map(c => (
+              (paged || []).map(c => (
                 <tr key={c.id} className="table-row">
                   <td className="table-cell">{c.id}</td>
                   <td className="table-cell">{c.nombre}</td>
