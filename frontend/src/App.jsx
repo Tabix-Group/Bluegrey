@@ -21,7 +21,7 @@ export default function App() {
           <Link to="/modelos-mensaje">Modelos de Mensaje</Link>
           <Link to="/usuarios">Usuarios</Link>
         </nav>
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="main-content">
           <Routes>
             <Route path="/clientes" element={<ClientesPage />} />
             <Route path="/contactos" element={<ContactosPage />} />

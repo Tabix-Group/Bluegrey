@@ -133,15 +133,9 @@ export default function EntregasPage() {
 
   return (
     <div className="card card-wide">
-      <div className="card-header flex-row-between">
-        <h2 className="card-title">Entregas</h2>
-        <button
-          onClick={openAddModal}
-          className="btn btn-primary"
-          title="Agregar una nueva entrega"
-          aria-label="Agregar una nueva entrega"
-          tabIndex={0}
-        >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <h2 style={{ margin: 0 }}>Entregas</h2>
+        <button className="btn btn-primary" onClick={openAddModal} title="Agregar una nueva entrega" aria-label="Agregar una nueva entrega" tabIndex={0}>
           Agregar entrega
         </button>
       </div>
@@ -228,10 +222,10 @@ export default function EntregasPage() {
             )}
           </tbody>
         </table>
-        <div className="pagination">
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn btn-secondary" title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
-          <span className="pagination-info">Página {page} de {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="btn btn-secondary" title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
+          <button className="btn" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
+          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
+          <button className="btn" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
         </div>
       </div>
     </div>
