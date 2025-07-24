@@ -174,8 +174,8 @@ export default function ContactosPage() {
                   <td>{c.email}</td>
                   <td>{clientes.find(cl => cl.id === c.cliente_id)?.nombre || ''}</td>
                   <td>
-                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0}>Editar</button>{' '}
-                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0}>Eliminar</button>
+                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>{' '}
+                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
                   </td>
                 </tr>
               ))

@@ -214,8 +214,8 @@ export default function EntregasPage() {
                   <td className="table-cell">{e.producto_id}</td>
                   <td className="table-cell">{e.estado}</td>
                   <td className="table-cell">
-                    <button onClick={() => openEditModal(e)} className="btn btn-warning mr-6" disabled={loading} title="Editar entrega" aria-label="Editar entrega" tabIndex={0}>Editar</button>{' '}
-                    <button onClick={() => handleDelete(e.id)} className="btn btn-danger" disabled={loading} title="Eliminar entrega" aria-label="Eliminar entrega" tabIndex={0}>Eliminar</button>
+                    <button className="btn" onClick={() => openEditModal(e)} disabled={loading} title="Editar entrega" aria-label="Editar entrega" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>{' '}
+                    <button className="btn" onClick={() => handleDelete(e.id)} disabled={loading} title="Eliminar entrega" aria-label="Eliminar entrega" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
                   </td>
                 </tr>
               ))

@@ -141,8 +141,8 @@ export default function UsuariosPage() {
                   <td>{usuario.email}</td>
                   <td>{usuario.rol}</td>
                   <td style={{ textAlign: 'center' }}>
-                    <button className="btn" onClick={() => openEditModal(usuario)} title="Editar usuario" aria-label="Editar usuario" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>
-                    <button className="btn" onClick={() => handleDelete(usuario.id)} title="Eliminar usuario" aria-label="Eliminar usuario" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
+                    <button className="btn" onClick={() => openEditModal(usuario)} disabled={loading} title="Editar usuario" aria-label="Editar usuario" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>
+                    <button className="btn" onClick={() => handleDelete(usuario.id)} disabled={loading} title="Eliminar usuario" aria-label="Eliminar usuario" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
                   </td>
                 </tr>
               ))

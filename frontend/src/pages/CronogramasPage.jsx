@@ -223,8 +223,8 @@ export default function CronogramasPage() {
                   <td className="table-cell">{c.recurrencia}</td>
                   <td className="table-cell">{c.activo ? 'Sí' : 'No'}</td>
                   <td className="table-cell">
-                    <button onClick={() => openEditModal(c)} className="btn btn-warning mr-6" disabled={loading} title="Editar cronograma" aria-label="Editar cronograma" tabIndex={0}>Editar</button>{' '}
-                    <button onClick={() => handleDelete(c.id)} className="btn btn-danger" disabled={loading} title="Eliminar cronograma" aria-label="Eliminar cronograma" tabIndex={0}>Eliminar</button>
+                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar cronograma" aria-label="Editar cronograma" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>{' '}
+                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar cronograma" aria-label="Eliminar cronograma" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
                   </td>
                 </tr>
               ))
