@@ -114,23 +114,22 @@ export default function CronogramasPage() {
     }
   }
 
-  // Búsqueda y paginación
-  let filtered = [];
-  let totalPages = 1;
-  let paged = [];
-  if (Array.isArray(cronogramas)) {
-    filtered = cronogramas.filter(c =>
-      (c.nombre && c.nombre.toLowerCase().includes(search.toLowerCase())) ||
-      (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
-      (c.cliente_id && String(c.cliente_id).includes(search))
-    );
-    totalPages = Math.ceil(filtered.length / pageSize) || 1;
-    paged = filtered.slice((page - 1) * pageSize, page * pageSize);
-  } else {
-    filtered = [];
-    paged = [];
-    totalPages = 1;
-  }
+  // Búsqueda y paginación con useMemo para evitar errores de referencia
+  const { filtered, paged, totalPages } = React.useMemo(() => {
+    let filtered = [];
+    let paged = [];
+    let totalPages = 1;
+    if (Array.isArray(cronogramas)) {
+      filtered = cronogramas.filter(c =>
+        (c.nombre && c.nombre.toLowerCase().includes(search.toLowerCase())) ||
+        (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
+        (c.cliente_id && String(c.cliente_id).includes(search))
+      );
+      totalPages = Math.ceil(filtered.length / pageSize) || 1;
+      paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+    }
+    return { filtered, paged, totalPages };
+  }, [cronogramas, search, page, pageSize]);
 
   return (
     <div className="card card-wide">
