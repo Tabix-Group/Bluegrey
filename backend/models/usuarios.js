@@ -1,7 +1,3 @@
-  async getByEmail(email) {
-    const result = await pool.query('SELECT * FROM usuarios WHERE email = $1', [email]);
-    return result.rows[0];
-  },
 import pool from './db.js';
 
 const Usuarios = {
