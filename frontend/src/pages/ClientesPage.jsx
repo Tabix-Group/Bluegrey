@@ -155,14 +155,13 @@ export default function ClientesPage() {
               <th>Nombre</th>
               <th>Dirección</th>
               <th>Categoría</th>
-              <th>Otros datos</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {paged.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
+                <td colSpan={5} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
                   No hay resultados para mostrar.
                 </td>
               </tr>
@@ -174,8 +173,8 @@ export default function ClientesPage() {
                   <td>{c.direccion}</td>
                   <td>{c.categoria}</td>
                   <td>
-                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar cliente" aria-label="Editar cliente" tabIndex={0}>Editar</button>{' '}
-                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar cliente" aria-label="Eliminar cliente" tabIndex={0}>Eliminar</button>
+                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar cliente" aria-label="Editar cliente" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>{' '}
+                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar cliente" aria-label="Eliminar cliente" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
                   </td>
                 </tr>
               ))

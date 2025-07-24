@@ -109,20 +109,20 @@ export default function UsuariosPage() {
           Agregar usuario
         </button>
       </div>
-      <div style={{ marginBottom: 18, display: 'flex', gap: 12, alignItems: 'center' }}>
+      <div style={{ marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
         <input
           className=""
+          type="text"
           placeholder="Buscar por nombre o email"
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1); }}
-          title="Buscar usuario (escriba y presione enter o espere)"
+          title="Buscar usuario"
           aria-label="Buscar usuario"
           tabIndex={0}
         />
       </div>
-      <div className="card" style={{ overflowX: 'auto', padding: 0, minHeight: 200, position: 'relative' }}>
-        <table className="" aria-label="Tabla de usuarios">
-          <caption style={{ display: 'none' }}>Lista de usuarios</caption>
+      <div className="card" style={{ overflowX: 'auto', padding: 0 }}>
+        <table className="" role="table" aria-label="Tabla de usuarios">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -132,24 +132,25 @@ export default function UsuariosPage() {
             </tr>
           </thead>
           <tbody>
-            {usuarios.length === 0 && !tableLoading && (
+            {usuarios.length === 0 && !tableLoading ? (
               <tr><td colSpan={4} style={{ textAlign: 'center', color: '#888', padding: 24 }}>No hay usuarios.</td></tr>
+            ) : (
+              usuarios.map(usuario => (
+                <tr key={usuario.id}>
+                  <td>{usuario.nombre}</td>
+                  <td>{usuario.email}</td>
+                  <td>{usuario.rol}</td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button className="btn" onClick={() => openEditModal(usuario)} title="Editar usuario" aria-label="Editar usuario" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>
+                    <button className="btn" onClick={() => handleDelete(usuario.id)} title="Eliminar usuario" aria-label="Eliminar usuario" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
+                  </td>
+                </tr>
+              ))
             )}
-            {usuarios.map(usuario => (
-              <tr key={usuario.id}>
-                <td>{usuario.nombre}</td>
-                <td>{usuario.email}</td>
-                <td>{usuario.rol}</td>
-                <td style={{ textAlign: 'center' }}>
-                  <button className="btn" onClick={() => openEditModal(usuario)} title="Editar usuario" aria-label="Editar usuario" tabIndex={0} style={{ marginRight: 8, background: '#ffc107', color: '#333' }}>Editar</button>
-                  <button className="btn" onClick={() => handleDelete(usuario.id)} title="Eliminar usuario" aria-label="Eliminar usuario" tabIndex={0} style={{ background: '#dc3545', color: '#fff' }}>Eliminar</button>
-                </td>
-              </tr>
-            ))}
           </tbody>
         </table>
         {tableLoading && <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', background: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}><span className="loader"></span></div>}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 18, gap: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
           <button className="btn" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
           <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {Math.max(1, Math.ceil(total / limit))}</span>
           <button className="btn" onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / limit)} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
