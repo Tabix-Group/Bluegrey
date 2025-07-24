@@ -28,7 +28,6 @@ export default function EntregasPage() {
   const [page, setPage] = useState(1);
   const pageSize = 8;
 
-
   useEffect(() => {
     cargarEntregas();
     cargarProductos();
@@ -133,12 +132,12 @@ export default function EntregasPage() {
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
 
   return (
-    <div style={{ maxWidth: 1100, margin: 'auto', padding: 24 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h2 style={{ margin: 0 }}>Entregas</h2>
+    <div className="card card-wide">
+      <div className="card-header flex-row-between">
+        <h2 className="card-title">Entregas</h2>
         <button
           onClick={openAddModal}
-          style={{ background: '#007bff', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
+          className="btn btn-primary"
           title="Agregar una nueva entrega"
           aria-label="Agregar una nueva entrega"
           tabIndex={0}
@@ -146,13 +145,13 @@ export default function EntregasPage() {
           Agregar entrega
         </button>
       </div>
-      <div style={{ marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div className="search-bar">
         <input
           type="text"
           placeholder="Buscar por cronograma ID, producto ID o estado..."
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1); }}
-          style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid #ccc', fontSize: 15, width: 320 }}
+          className="input"
           title="Buscar entregas"
           aria-label="Buscar entregas"
           tabIndex={0}
@@ -163,10 +162,10 @@ export default function EntregasPage() {
         onRequestClose={closeModal}
         title={editId ? 'Editar entrega' : 'Agregar entrega'}
       >
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }} aria-label="Formulario de entrega">
-          {formError && <div style={{ color: '#dc3545', background: '#fff0f0', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formError}</div>}
-          {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
-          <select required value={form.cronograma_id} onChange={e => setForm(f => ({ ...f, cronograma_id: e.target.value }))} style={inputStyle} title="Cronograma asociado" aria-label="Cronograma asociado" tabIndex={0}>
+        <form onSubmit={handleSubmit} className="modal-content" aria-label="Formulario de entrega">
+          {formError && <div className="alert alert-danger">{formError}</div>}
+          {formSuccess && <div className="alert alert-success">{formSuccess}</div>}
+          <select required value={form.cronograma_id} onChange={e => setForm(f => ({ ...f, cronograma_id: e.target.value }))} className="input" title="Cronograma asociado" aria-label="Cronograma asociado" tabIndex={0}>
             <option value="">Seleccionar cronograma...</option>
             {cronogramas.map(c => (
               <option key={c.id} value={c.id}>
@@ -174,8 +173,8 @@ export default function EntregasPage() {
               </option>
             ))}
           </select>
-          <input required type="date" placeholder="Fecha de entrega" value={form.fecha_entrega} onChange={e => setForm(f => ({ ...f, fecha_entrega: e.target.value }))} style={inputStyle} title="Fecha de la entrega" aria-label="Fecha de la entrega" tabIndex={0} />
-          <select required value={form.producto_id} onChange={e => setForm(f => ({ ...f, producto_id: e.target.value }))} style={inputStyle} title="Producto entregado" aria-label="Producto entregado" tabIndex={0}>
+          <input required type="date" placeholder="Fecha de entrega" value={form.fecha_entrega} onChange={e => setForm(f => ({ ...f, fecha_entrega: e.target.value }))} className="input" title="Fecha de la entrega" aria-label="Fecha de la entrega" tabIndex={0} />
+          <select required value={form.producto_id} onChange={e => setForm(f => ({ ...f, producto_id: e.target.value }))} className="input" title="Producto entregado" aria-label="Producto entregado" tabIndex={0}>
             <option value="">Seleccionar producto...</option>
             {productos.map(p => (
               <option key={p.id} value={p.id}>
@@ -183,114 +182,60 @@ export default function EntregasPage() {
               </option>
             ))}
           </select>
-          <select value={form.estado} onChange={e => setForm(f => ({ ...f, estado: e.target.value }))} style={inputStyle} title="Estado de la entrega" aria-label="Estado de la entrega" tabIndex={0}>
+          <select value={form.estado} onChange={e => setForm(f => ({ ...f, estado: e.target.value }))} className="input" title="Estado de la entrega" aria-label="Estado de la entrega" tabIndex={0}>
             <option value="pendiente">Pendiente</option>
             <option value="enviado">Enviado</option>
             <option value="entregado">Entregado</option>
           </select>
-          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" style={{...submitBtnStyle, background:'#0056b3'}} disabled={loading} title={editId ? 'Actualizar entrega' : 'Agregar entrega'} aria-label={editId ? 'Actualizar entrega' : 'Agregar entrega'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
-            <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
+          <div className="flex-row gap-12 mt-8">
+            <button type="submit" className="btn btn-primary" disabled={loading} title={editId ? 'Actualizar entrega' : 'Agregar entrega'} aria-label={editId ? 'Actualizar entrega' : 'Agregar entrega'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
+            <button type="button" onClick={closeModal} className="btn btn-secondary" disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
           </div>
-          {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader" style={{ border: '3px solid #eee', borderTop: '3px solid #007bff', borderRadius: '50%', width: 22, height: 22, display: 'inline-block', animation: 'spin 1s linear infinite' }}></span></div>}
+          {loading && <div className="loader-container"><span className="loader"></span></div>}
         </form>
       </CustomModal>
-      <div style={{ overflowX: 'auto', background: '#fff', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.07)', padding: 16 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }} role="table" aria-label="Tabla de entregas">
+      <div className="table-responsive card-table">
+        <table className="table" role="table" aria-label="Tabla de entregas">
           <thead>
-            <tr style={{ background: '#f7f7f7' }}>
-              <th style={thStyle} scope="col">ID</th>
-              <th style={thStyle} scope="col">Cronograma ID</th>
-              <th style={thStyle} scope="col">Fecha entrega</th>
-              <th style={thStyle} scope="col">Producto ID</th>
-              <th style={thStyle} scope="col">Estado</th>
-              <th style={thStyle} scope="col">Acciones</th>
+            <tr className="table-header">
+              <th className="table-cell" scope="col">ID</th>
+              <th className="table-cell" scope="col">Cronograma ID</th>
+              <th className="table-cell" scope="col">Fecha entrega</th>
+              <th className="table-cell" scope="col">Producto ID</th>
+              <th className="table-cell" scope="col">Estado</th>
+              <th className="table-cell" scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {paged.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
-                  No hay resultados para mostrar.
-                </td>
+                <td colSpan={6} className="table-cell text-center text-muted">No hay resultados para mostrar.</td>
               </tr>
             ) : (
               paged.map(e => (
-                <tr key={e.id} style={{ borderBottom: '1px solid #eee', background: '#fff' }}>
-                  <td style={tdStyle}>{e.id}</td>
-                  <td style={tdStyle}>{e.cronograma_id}</td>
-                  <td style={tdStyle}>{e.fecha_entrega ? e.fecha_entrega.slice(0, 10) : ''}</td>
-                  <td style={tdStyle}>{e.producto_id}</td>
-                  <td style={tdStyle}>{e.estado}</td>
-                  <td style={tdStyle}>
-                    <button onClick={() => openEditModal(e)} style={editBtnStyle} disabled={loading} title="Editar entrega" aria-label="Editar entrega" tabIndex={0}>Editar</button>{' '}
-                    <button onClick={() => handleDelete(e.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar entrega" aria-label="Eliminar entrega" tabIndex={0}>Eliminar</button>
+                <tr key={e.id} className="table-row">
+                  <td className="table-cell">{e.id}</td>
+                  <td className="table-cell">{e.cronograma_id}</td>
+                  <td className="table-cell">{e.fecha_entrega ? e.fecha_entrega.slice(0, 10) : ''}</td>
+                  <td className="table-cell">{e.producto_id}</td>
+                  <td className="table-cell">{e.estado}</td>
+                  <td className="table-cell">
+                    <button onClick={() => openEditModal(e)} className="btn btn-warning mr-6" disabled={loading} title="Editar entrega" aria-label="Editar entrega" tabIndex={0}>Editar</button>{' '}
+                    <button onClick={() => handleDelete(e.id)} className="btn btn-danger" disabled={loading} title="Eliminar entrega" aria-label="Eliminar entrega" tabIndex={0}>Eliminar</button>
                   </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} style={pageBtnStyle} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
-          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} style={pageBtnStyle} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
+        <div className="pagination">
+          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn btn-secondary" title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
+          <span className="pagination-info">Página {page} de {totalPages}</span>
+          <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="btn btn-secondary" title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
         </div>
       </div>
-      <style>{`
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 }
 
-const inputStyle = {
-  padding: '10px 12px',
-  borderRadius: 8,
-  border: '1px solid #ccc',
-  fontSize: 15
-};
-const submitBtnStyle = {
-  background: '#007bff',
-  color: '#fff',
-  border: 'none',
-  borderRadius: 8,
-  padding: '10px 24px',
-  fontWeight: 600,
-  fontSize: 15,
-  cursor: 'pointer',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-};
-const cancelBtnStyle = {
-  background: '#eee',
-  color: '#333',
-  border: 'none',
-  borderRadius: 8,
-  padding: '10px 24px',
-  fontWeight: 600,
-  fontSize: 15,
-  cursor: 'pointer'
-};
-const editBtnStyle = {
-  background: '#ffc107',
-  color: '#222',
-  border: 'none',
-  borderRadius: 8,
-  padding: '7px 16px',
-  fontWeight: 600,
-  fontSize: 14,
-  cursor: 'pointer',
-  marginRight: 6
-};
-const deleteBtnStyle = {
-  background: '#dc3545',
-  color: '#fff',
-  border: 'none',
-  borderRadius: 8,
-  padding: '7px 16px',
-  fontWeight: 600,
-  fontSize: 14,
-  cursor: 'pointer'
-};
-const thStyle = { padding: '10px 8px', fontWeight: 700, background: '#f7f7f7', borderBottom: '2px solid #eee' };
-const tdStyle = { padding: '8px 8px', borderBottom: '1px solid #eee', textAlign: 'left' };
+

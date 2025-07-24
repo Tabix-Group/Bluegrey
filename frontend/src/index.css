@@ -96,6 +96,71 @@ nav a:focus {
   transform: translateY(-1px);
   text-decoration: underline;
 }
+/* --- Barra de Navegación High-Tech --- */
+nav {
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 68px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 4px 24px 0 rgba(0,82,204,0.08), 0 1.5px 0 0 var(--color-border);
+  border-radius: 0 0 var(--radius-large) var(--radius-large);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+nav .nav-logo {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0,82,204,0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+nav .nav-links {
+  display: flex;
+  gap: 32px;
+}
+nav a, nav .nav-link {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-medium);
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  position: relative;
+}
+nav a:hover, nav .nav-link:hover, nav a.active, nav .nav-link.active {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(0,82,204,0.10);
+  text-decoration: none;
+}
+nav a::after, nav .nav-link::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 0;
+  background: var(--color-accent);
+  border-radius: 2px;
+  transition: width 0.2s;
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  transform: translateX(-50%);
+}
+nav a:hover::after, nav .nav-link:hover::after, nav a.active::after, nav .nav-link.active::after {
+  width: 80%;
+}
 
 /* Primary buttons */
 button {
@@ -180,6 +245,46 @@ tr:last-child td {
 tr:hover {
   background: rgba(0, 82, 204, 0.04);
 }
+/* --- Tablas Profesionales --- */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  margin-bottom: 32px;
+  font-size: 1.04rem;
+}
+th, td {
+  padding: 16px 14px;
+  text-align: left;
+}
+th {
+  background: var(--color-table-header-bg);
+  color: var(--color-secondary);
+  font-weight: 700;
+  border-bottom: 2px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  letter-spacing: 0.01em;
+}
+td {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+tr:nth-child(even) td {
+  background: #f7fafd;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+tr:hover td {
+  background: rgba(0, 82, 204, 0.06);
+  transition: background 0.18s;
+}
 
 /* Modals (ReactModal compatibility) */
 .modal-content,
@@ -206,6 +311,35 @@ tr:hover {
   gap: 16px;
   margin-top: 32px;
 }
+/* --- Modales High-Tech --- */
+.modal-content, .ReactModal__Content {
+  background: var(--color-surface);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-large);
+  padding: 40px 40px 32px 40px;
+  max-width: 540px;
+  margin: 80px auto;
+  position: relative;
+  border: 1.5px solid var(--color-border);
+  animation: modalIn 0.32s cubic-bezier(.4,0,.2,1);
+}
+.modal-header, .ReactModal__Header {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  letter-spacing: 0.01em;
+}
+.modal-footer, .ReactModal__Footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+}
+@keyframes modalIn {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: none; }
+}
 
 /* Cards, panels and boxes */
 .card,
@@ -223,6 +357,33 @@ tr:hover {
 .panel:hover {
   box-shadow: var(--shadow-large);
   transform: translateY(-2px);
+}
+/* --- Cards, Panels y Boxes High-Tech --- */
+.card, .box, .panel {
+  background: var(--color-surface);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
+  padding: 40px 32px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.22s, border-color 0.22s, transform 0.22s;
+  border: 1.5px solid var(--color-border);
+}
+.card::before, .box::before, .panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  opacity: 0.13;
+}
+.card:hover, .box:hover, .panel:hover {
+  box-shadow: var(--shadow-2xl);
+  transform: translateY(-4px) scale(1.01);
+  border-color: var(--color-primary);
 }
 
 /* Alerts */
@@ -288,6 +449,37 @@ tr:hover {
   .modal-content,
   .ReactModal__Content {
     padding: 24px 20px;
+/* --- Botones Consistentes y Modernos --- */
+button, .btn {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 28px;
+  border: none;
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow-small);
+  transition: background 0.18s, box-shadow 0.18s, transform 0.13s;
+  outline: none;
+  position: relative;
+}
+button:hover, .btn:hover {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px) scale(1.01);
+}
+button:active, .btn:active {
+  background: var(--color-primary-hover);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset;
+  transform: scale(0.98);
+}
+button:disabled, .btn:disabled {
+  background: var(--color-border);
+  color: #a0a7b5;
+  cursor: not-allowed;
+}
     margin: 40px auto;
   }
 }
@@ -299,5 +491,33 @@ tr:hover {
   .box,
   .panel {
     padding: 20px;
+  }
+}
+@media (max-width: 900px) {
+  nav {
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 18px;
+    height: auto;
+  }
+  nav .nav-links {
+    gap: 16px;
+  }
+  table, th, td {
+    font-size: 0.97rem;
+  }
+  .card, .box, .panel, .modal-content, .ReactModal__Content {
+    padding: 24px 16px;
+  }
+}
+@media (max-width: 600px) {
+  nav {
+    padding: 0 8px;
+  }
+  .card, .box, .panel, .modal-content, .ReactModal__Content {
+    padding: 16px 8px;
+  }
+  table, th, td {
+    font-size: 0.92rem;
   }
 }
