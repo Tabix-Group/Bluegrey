@@ -7,12 +7,12 @@ export const clienteSchema = Joi.object({
   otros_datos: Joi.object().allow(null)
 });
 
+
 export const contactoSchema = Joi.object({
   nombre: Joi.string().min(2).max(100).required(),
   telefono: Joi.string().min(6).max(20).required(),
   email: Joi.string().email().allow('', null),
-  cliente_id: Joi.number().integer().required(),
-  otros_datos: Joi.object().allow(null)
+  cliente_id: Joi.number().integer().required()
 });
 
 export const productoSchema = Joi.object({
