@@ -11,25 +11,29 @@ import UsuariosPage from './pages/UsuariosPage';
 export default function App() {
   return (
     <Router>
-      <nav style={{ margin: 10 }}>
-        <Link to="/clientes">Clientes</Link> |{' '}
-        <Link to="/contactos">Contactos</Link> |{' '}
-        <Link to="/productos">Productos</Link> |{' '}
-        <Link to="/cronogramas">Cronogramas</Link> |{' '}
-        <Link to="/entregas">Entregas</Link> |{' '}
-        <Link to="/modelos-mensaje">Modelos de Mensaje</Link> |{' '}
-        <Link to="/usuarios">Usuarios</Link>
-      </nav>
-      <Routes>
-        <Route path="/clientes" element={<ClientesPage />} />
-        <Route path="/contactos" element={<ContactosPage />} />
-        <Route path="/productos" element={<ProductosPage />} />
-        <Route path="/cronogramas" element={<CronogramasPage />} />
-        <Route path="/entregas" element={<EntregasPage />} />
-        <Route path="/modelos-mensaje" element={<ModelosMensajePage />} />
-        <Route path="/usuarios" element={<UsuariosPage />} />
-        <Route path="*" element={<ClientesPage />} />
-      </Routes>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'row' }}>
+        <nav className="sidebar-navbar">
+          <Link to="/clientes">Clientes</Link>
+          <Link to="/contactos">Contactos</Link>
+          <Link to="/productos">Productos</Link>
+          <Link to="/cronogramas">Cronogramas</Link>
+          <Link to="/entregas">Entregas</Link>
+          <Link to="/modelos-mensaje">Modelos de Mensaje</Link>
+          <Link to="/usuarios">Usuarios</Link>
+        </nav>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <Routes>
+            <Route path="/clientes" element={<ClientesPage />} />
+            <Route path="/contactos" element={<ContactosPage />} />
+            <Route path="/productos" element={<ProductosPage />} />
+            <Route path="/cronogramas" element={<CronogramasPage />} />
+            <Route path="/entregas" element={<EntregasPage />} />
+            <Route path="/modelos-mensaje" element={<ModelosMensajePage />} />
+            <Route path="/usuarios" element={<UsuariosPage />} />
+            <Route path="*" element={<ClientesPage />} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   );
 }
