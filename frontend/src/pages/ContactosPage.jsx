@@ -26,7 +26,7 @@ export default function ContactosPage() {
     (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
   );
   const totalPages = Math.ceil(filtered.length / pageSize) || 1;
-  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize); // This line is removed
 
   useEffect(() => {
     cargarContactos();

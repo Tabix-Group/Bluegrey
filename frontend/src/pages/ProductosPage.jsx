@@ -42,7 +42,7 @@ export default function ProductosPage() {
       precio: producto.precio || ''
     });
     setFormError('');
-    setFormSuccess('');
+  // const paged = filtered.slice((page - 1) * pageSize, page * pageSize); // Eliminado para evitar error de referencia no definida
     setModalOpen(true);
   }
 
