@@ -22,9 +22,13 @@ export const getUsuarioById = async (req, res) => {
   }
 };
 
+
 export const createUsuario = async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
+    if (!nombre || !email || !password || !rol) {
+      return res.status(400).json({ error: 'Faltan campos requeridos (nombre, email, password, rol)' });
+    }
     const nuevoUsuario = await Usuarios.create({ nombre, email, password, rol });
     res.status(201).json(nuevoUsuario);
   } catch (err) {
@@ -32,9 +36,13 @@ export const createUsuario = async (req, res) => {
   }
 };
 
+
 export const updateUsuario = async (req, res) => {
   try {
     const { nombre, email, password, rol } = req.body;
+    if (!nombre || !email || !password || !rol) {
+      return res.status(400).json({ error: 'Faltan campos requeridos (nombre, email, password, rol)' });
+    }
     const usuarioActualizado = await Usuarios.update(req.params.id, { nombre, email, password, rol });
     if (!usuarioActualizado) return res.status(404).json({ error: 'Usuario no encontrado' });
     res.json(usuarioActualizado);
@@ -42,6 +50,7 @@ export const updateUsuario = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar usuario' });
   }
 };
+
 
 export const deleteUsuario = async (req, res) => {
   try {

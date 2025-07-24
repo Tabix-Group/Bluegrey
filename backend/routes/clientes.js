@@ -16,24 +16,48 @@ router.get('/:id', async (req, res) => {
 });
 
 
+
+// POST /api/clientes
 router.post('/', async (req, res) => {
-  // Remove otros_datos from req.body if present
+  // Solo aceptar los campos válidos
   const { nombre, direccion, categoria } = req.body;
-  if (!nombre || !nombre.trim()) return res.status(400).json({ error: 'El nombre es obligatorio.' });
-  const data = await Clientes.createCliente({ nombre, direccion, categoria });
-  res.status(201).json(data);
+  if (!nombre || !nombre.trim()) {
+    return res.status(400).json({ error: 'El nombre es obligatorio.' });
+  }
+  try {
+    const data = await Clientes.createCliente({ nombre, direccion, categoria });
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al crear cliente' });
+  }
 });
 
 
+
+// PUT /api/clientes/:id
 router.put('/:id', async (req, res) => {
   const { nombre, direccion, categoria } = req.body;
-  const data = await Clientes.updateCliente(req.params.id, { nombre, direccion, categoria });
-  res.json(data);
+  if (!nombre || !nombre.trim()) {
+    return res.status(400).json({ error: 'El nombre es obligatorio.' });
+  }
+  try {
+    const data = await Clientes.updateCliente(req.params.id, { nombre, direccion, categoria });
+    if (!data) return res.status(404).json({ error: 'Cliente no encontrado' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar cliente' });
+  }
 });
 
+
+// DELETE /api/clientes/:id
 router.delete('/:id', async (req, res) => {
-  await Clientes.deleteCliente(req.params.id);
-  res.status(204).end();
+  try {
+    await Clientes.deleteCliente(req.params.id);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar cliente' });
+  }
 });
 
 export default router;

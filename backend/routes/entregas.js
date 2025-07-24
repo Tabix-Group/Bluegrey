@@ -22,14 +22,31 @@ router.post('/', async (req, res) => {
   res.status(201).json(data);
 });
 
+
+// PUT /api/entregas/:id
 router.put('/:id', async (req, res) => {
-  const data = await Entregas.updateEntrega(req.params.id, req.body);
-  res.json(data);
+  const { cronograma_id, fecha_entrega, producto_id, estado } = req.body;
+  if (!cronograma_id || !fecha_entrega || !producto_id) {
+    return res.status(400).json({ error: 'Faltan campos requeridos (cronograma_id, fecha_entrega, producto_id)' });
+  }
+  try {
+    const data = await Entregas.updateEntrega(req.params.id, req.body);
+    if (!data) return res.status(404).json({ error: 'Entrega no encontrada' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar entrega' });
+  }
 });
 
+
+// DELETE /api/entregas/:id
 router.delete('/:id', async (req, res) => {
-  await Entregas.deleteEntrega(req.params.id);
-  res.status(204).end();
+  try {
+    await Entregas.deleteEntrega(req.params.id);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar entrega' });
+  }
 });
 
 export default router;

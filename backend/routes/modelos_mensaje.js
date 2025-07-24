@@ -22,14 +22,31 @@ router.post('/', async (req, res) => {
   res.status(201).json(data);
 });
 
+
+// PUT /api/modelos-mensaje/:id
 router.put('/:id', async (req, res) => {
-  const data = await ModelosMensaje.updateModeloMensaje(req.params.id, req.body);
-  res.json(data);
+  const { texto_base } = req.body;
+  if (!texto_base) {
+    return res.status(400).json({ error: 'El campo texto_base es obligatorio.' });
+  }
+  try {
+    const data = await ModelosMensaje.updateModeloMensaje(req.params.id, req.body);
+    if (!data) return res.status(404).json({ error: 'Modelo de mensaje no encontrado' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar modelo de mensaje' });
+  }
 });
 
+
+// DELETE /api/modelos-mensaje/:id
 router.delete('/:id', async (req, res) => {
-  await ModelosMensaje.deleteModeloMensaje(req.params.id);
-  res.status(204).end();
+  try {
+    await ModelosMensaje.deleteModeloMensaje(req.params.id);
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).json({ error: 'Error al eliminar modelo de mensaje' });
+  }
 });
 
 export default router;
