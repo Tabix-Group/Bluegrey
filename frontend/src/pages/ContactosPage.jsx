@@ -44,86 +44,7 @@ export default function ContactosPage() {
     setForm({
       nombre: contacto.nombre,
       telefono: contacto.telefono,
-      email: contacto.email || '',
-      cliente_id: contacto.cliente_id || ''
-    });
-    setFormError('');
-    setFormSuccess('');
-    setModalOpen(true);
-  }
-
-  function closeModal() {
-    setModalOpen(false);
-    setEditId(null);
-    setForm({ nombre: '', telefono: '', email: '', cliente_id: '' });
-    setFormError('');
-    setFormSuccess('');
-    setLoading(false);
-  }
-
-  function validateForm() {
-    if (!form.nombre.trim()) return 'El nombre es obligatorio.';
-    if (!form.telefono.trim()) return 'El teléfono es obligatorio.';
-    if (!form.cliente_id.trim() || isNaN(Number(form.cliente_id))) return 'Cliente es obligatorio.';
-    if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) return 'El email no es válido.';
-    return '';
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setFormError('');
-    setFormSuccess('');
-    const error = validateForm();
-    if (error) {
-      setFormError(error);
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = { ...form, cliente_id: Number(form.cliente_id) };
-      if (editId) {
-        // ...existing code...
-      }
-      // ...existing code...
-    } catch (err) {
-      // ...existing code...
-    } finally {
-      // ...existing code...
-    }
-  }
-
-  // ...existing code...
-
-  // Búsqueda y paginación
-  const filtered = contactos.filter(c =>
-    c.nombre.toLowerCase().includes(search.toLowerCase()) ||
-    (c.telefono && c.telefono.toLowerCase().includes(search.toLowerCase())) ||
-    (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
-  );
-  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
-  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
-
-  return (
-    <div className="app-content card">
-      <div className="app-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h2 style={{ margin: 0 }}>Contactos</h2>
-        <button className="btn" onClick={openAddModal} title="Agregar un nuevo contacto" aria-label="Agregar un nuevo contacto" tabIndex={0}>
-          Agregar contacto
-        </button>
-      </div>
-      <div style={{ marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <input
-          className=""
-          type="text"
-          placeholder="Buscar por nombre, teléfono, email..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1); }}
-          title="Buscar contactos"
-          aria-label="Buscar contactos"
-          tabIndex={0}
-        />
-      </div>
-      <CustomModal
+    // ...existing code...
         isOpen={modalOpen}
         onRequestClose={closeModal}
         title={editId ? 'Editar contacto' : 'Agregar contacto'}
@@ -190,40 +111,6 @@ export default function ContactosPage() {
     </div>
   );
 }
-      <div style={{ marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <input
-          className=""
-          type="text"
-          placeholder="Buscar por nombre, teléfono, email..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1); }}
-          title="Buscar contactos"
-          aria-label="Buscar contactos"
-          tabIndex={0}
-        />
-      </div>
-      <CustomModal
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
-        title={editId ? 'Editar contacto' : 'Agregar contacto'}
-      >
-        <form onSubmit={handleSubmit} className="modal-content" aria-label="Formulario de contacto">
-          {formError && <div className="alert-error">{formError}</div>}
-          {formSuccess && <div className="alert-success">{formSuccess}</div>}
-          <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} title="Nombre del contacto" aria-label="Nombre del contacto" tabIndex={0} />
-          <input placeholder="Teléfono" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} title="Teléfono del contacto" aria-label="Teléfono del contacto" tabIndex={0} />
-          <input placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} title="Email del contacto" aria-label="Email del contacto" tabIndex={0} />
-          <select value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} title="Cliente" aria-label="Cliente" tabIndex={0} required>
-            <option value="">Seleccionar cliente</option>
-            {clientes.map(c => <option key={c.id} value={c.id}>{c.nombre}</option>)}
-          </select>
-          <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-            <button type="submit" className="btn" disabled={loading} title={editId ? 'Actualizar contacto' : 'Agregar contacto'} aria-label={editId ? 'Actualizar contacto' : 'Agregar contacto'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
-            <button type="button" className="btn" onClick={closeModal} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
-          </div>
-          {loading && <div style={{ position: 'absolute', right: 16, bottom: 16 }}><span className="loader"></span></div>}
-        </form>
-      </CustomModal>
       <div className="card" style={{ overflowX: 'auto', padding: 0 }}>
         <table className="" role="table" aria-label="Tabla de contactos">
           <thead>
