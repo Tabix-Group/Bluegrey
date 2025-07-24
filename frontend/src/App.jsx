@@ -1,8 +1,10 @@
 
 
 import { useState } from 'react';
+import Button from '@mui/material/Button';
 import { MdPeople, MdContacts, MdInventory2, MdEventNote, MdLocalShipping, MdMessage, MdAdminPanelSettings } from 'react-icons/md';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+
 import ClientesPage from './pages/ClientesPage';
 import ContactosPage from './pages/ContactosPage';
 import ProductosPage from './pages/ProductosPage';
@@ -10,6 +12,7 @@ import CronogramasPage from './pages/CronogramasPage';
 import EntregasPage from './pages/EntregasPage';
 import ModelosMensajePage from './pages/ModelosMensajePage';
 import UsuariosPage from './pages/UsuariosPage';
+import LoginPage from './pages/LoginPage';
 
 
 import { useRef } from 'react';
@@ -126,6 +129,24 @@ function Footbar({ collapsed, setCollapsed }) {
 
 export default function App() {
   const [collapsed, setCollapsed] = useState(true);
+  const [isLogged, setIsLogged] = useState(() => {
+    // Persistencia simple en localStorage
+    return localStorage.getItem('isLogged') === 'true';
+  });
+
+  const handleLogin = () => {
+    setIsLogged(true);
+    localStorage.setItem('isLogged', 'true');
+  };
+  const handleLogout = () => {
+    setIsLogged(false);
+    localStorage.removeItem('isLogged');
+  };
+
+  if (!isLogged) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
   return (
     <Router>
       {/* Logo fijo arriba a la derecha */}
@@ -148,6 +169,35 @@ export default function App() {
       />
       <Footbar collapsed={collapsed} setCollapsed={setCollapsed} />
       <div className="main-content">
+        <Button
+          onClick={handleLogout}
+          variant="outlined"
+          size="small"
+          sx={{
+            position: 'fixed',
+            top: 24,
+            left: 32,
+            zIndex: 201,
+            borderRadius: 2,
+            fontWeight: 500,
+            fontSize: '0.98em',
+            color: '#64748b',
+            borderColor: '#cbd5e1',
+            background: 'rgba(255,255,255,0.85)',
+            px: 1.8,
+            py: 0.5,
+            minWidth: 0,
+            boxShadow: 'none',
+            textTransform: 'none',
+            transition: 'all 0.18s',
+            '&:hover': {
+              background: '#f1f5f9',
+              borderColor: '#94a3b8',
+              color: '#334155',
+              boxShadow: '0 2px 8px rgba(100,116,139,0.08)',
+            },
+          }}
+        >Cerrar sesión</Button>
         <Routes>
           <Route path="/clientes" element={<ClientesPage />} />
           <Route path="/contactos" element={<ContactosPage />} />
