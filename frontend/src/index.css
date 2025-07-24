@@ -1,1 +1,172 @@
-/* Archivo CSS vacío para evitar error de build de Vite. Agrega tus estilos aquí si lo necesitas. */
+
+/* --- CRM/ERP Modern UI (SAP/Salesforce inspired) --- */
+
+body {
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  background: #f4f6fa;
+  color: #222;
+  margin: 0;
+  min-height: 100vh;
+}
+
+nav {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 16px 32px;
+  border-radius: 0 0 16px 16px;
+  margin-bottom: 32px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+nav a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 17px;
+  transition: color 0.2s;
+}
+nav a:hover {
+  color: #0d47a1;
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  color: #1a237e;
+  margin-top: 0;
+}
+
+button {
+  font-family: inherit;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+button:active {
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.12);
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 15px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  transition: border 0.2s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px #e3f2fd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+th, td {
+  padding: 12px 10px;
+  text-align: left;
+}
+th {
+  background: #e3eafc;
+  color: #1a237e;
+  font-weight: 700;
+  border-bottom: 2px solid #cfd8dc;
+}
+tr {
+  border-bottom: 1px solid #e3eafc;
+}
+tr:last-child {
+  border-bottom: none;
+}
+
+.modal-content, .ReactModal__Content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.10);
+  padding: 32px 28px 24px 28px;
+  max-width: 480px;
+  margin: auto;
+}
+
+.modal-header, .ReactModal__Header {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 18px;
+}
+
+.modal-footer, .ReactModal__Footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.loader {
+  border: 3px solid #e3eafc;
+  border-top: 3px solid #1976d2;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Scrollbar minimalista */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #e3eafc;
+}
+::-webkit-scrollbar-thumb {
+  background: #b0bec5;
+  border-radius: 8px;
+}
+
+/* Sombras y detalles */
+.card, .box, .panel {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+/* Alerts y mensajes */
+.alert-success {
+  background: #eafbe7;
+  color: #28a745;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+}
+.alert-error {
+  background: #fff0f0;
+  color: #dc3545;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  nav { flex-direction: column; gap: 10px; padding: 12px 8px; }
+  .modal-content, .ReactModal__Content { padding: 18px 6px; }
+  table, th, td { font-size: 14px; }
+}
