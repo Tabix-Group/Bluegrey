@@ -19,6 +19,15 @@ export default function ContactosPage() {
   const [clientes, setClientes] = useState([]);
   const pageSize = 8;
 
+  // Búsqueda y paginación
+  const filtered = contactos.filter(c =>
+    c.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    (c.telefono && c.telefono.toLowerCase().includes(search.toLowerCase())) ||
+    (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
+  );
+  const totalPages = Math.ceil(filtered.length / pageSize) || 1;
+  const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
+
   useEffect(() => {
     cargarContactos();
     cargarClientes();
