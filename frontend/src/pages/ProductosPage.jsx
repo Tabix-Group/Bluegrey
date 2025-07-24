@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import CustomModal from '../components/CustomModal';
+import { getProductos, createProducto, updateProducto, deleteProducto } from '../services/productosService';
 // Estilos únicos (deben estar antes del componente para estar disponibles)
 const inputStyle = {
   padding: '10px 12px',
