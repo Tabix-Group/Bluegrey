@@ -120,14 +120,16 @@ export default function CronogramasPage() {
   let paged = [];
   if (Array.isArray(cronogramas)) {
     filtered = cronogramas.filter(c =>
-      c.nombre && c.nombre.toLowerCase().includes(search.toLowerCase()) ||
+      (c.nombre && c.nombre.toLowerCase().includes(search.toLowerCase())) ||
       (c.descripcion && c.descripcion.toLowerCase().includes(search.toLowerCase())) ||
       (c.cliente_id && String(c.cliente_id).includes(search))
     );
     totalPages = Math.ceil(filtered.length / pageSize) || 1;
     paged = filtered.slice((page - 1) * pageSize, page * pageSize);
   } else {
+    filtered = [];
     paged = [];
+    totalPages = 1;
   }
 
   return (
