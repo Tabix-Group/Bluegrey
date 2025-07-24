@@ -1,3 +1,25 @@
+// Login de usuario por email y password
+export const loginUsuario = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Faltan email o password' });
+    }
+    const usuario = await Usuarios.getByEmail(email);
+    if (!usuario) {
+      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+    }
+    // Comparar password plano (en producción usar hash)
+    if (usuario.password !== password) {
+      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+    }
+    // No enviar password en la respuesta
+    const { password: _, ...usuarioSafe } = usuario;
+    res.json(usuarioSafe);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al autenticar usuario' });
+  }
+};
 import pool from '../models/db.js';
 import Usuarios from '../models/usuarios.js';
 

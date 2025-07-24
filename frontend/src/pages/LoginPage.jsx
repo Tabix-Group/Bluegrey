@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { loginUsuario } from '../services/authService';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -20,14 +21,14 @@ export default function LoginPage({ onLogin }) {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
-    // Simular delay de autenticación
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    if (user === 'demo' && pass === 'demo123') {
+    try {
+      // user es el email
+      await loginUsuario(user, pass);
       onLogin();
-    } else {
-      setError('Usuario o contraseña incorrectos');
+    } catch (err) {
+      setError(
+        err?.response?.data?.error || 'Usuario o contraseña incorrectos'
+      );
     }
     setIsLoading(false);
   };
@@ -136,9 +137,10 @@ export default function LoginPage({ onLogin }) {
             <TextField
               fullWidth
               variant="outlined"
-              placeholder="Usuario"
+              placeholder="Email"
               value={user}
               onChange={(e) => setUser(e.target.value)}
+              type="email"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
