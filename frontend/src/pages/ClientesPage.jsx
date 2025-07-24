@@ -124,7 +124,6 @@ export default function ClientesPage() {
           placeholder="Buscar por nombre, dirección o categoría..."
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1); }}
-          style={{ width: 320 }}
           title="Buscar clientes"
           aria-label="Buscar clientes"
           tabIndex={0}
