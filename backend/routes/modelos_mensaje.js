@@ -4,22 +4,40 @@ const router = express.Router();
 
 import { modeloMensajeSchema } from '../models/schemas.js';
 
+
+// GET /api/modelos-mensaje
 router.get('/', async (req, res) => {
-  const data = await ModelosMensaje.getAllModelosMensaje();
-  res.json(data);
+  try {
+    const data = await ModelosMensaje.getAllModelosMensaje();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener modelos de mensaje' });
+  }
 });
 
+
+// GET /api/modelos-mensaje/:id
 router.get('/:id', async (req, res) => {
-  const data = await ModelosMensaje.getModeloMensajeById(req.params.id);
-  if (!data) return res.status(404).json({ error: 'No encontrado' });
-  res.json(data);
+  try {
+    const data = await ModelosMensaje.getModeloMensajeById(req.params.id);
+    if (!data) return res.status(404).json({ error: 'No encontrado' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener modelo de mensaje' });
+  }
 });
 
+
+// POST /api/modelos-mensaje
 router.post('/', async (req, res) => {
   const { error } = modeloMensajeSchema.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
-  const data = await ModelosMensaje.createModeloMensaje(req.body);
-  res.status(201).json(data);
+  try {
+    const data = await ModelosMensaje.createModeloMensaje(req.body);
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al crear modelo de mensaje' });
+  }
 });
 
 
