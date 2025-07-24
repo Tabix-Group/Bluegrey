@@ -107,46 +107,6 @@ export default function ContactosPage() {
     </div>
   );
 }
-      <div className="card" style={{ overflowX: 'auto', padding: 0 }}>
-        <table className="" role="table" aria-label="Tabla de contactos">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Teléfono</th>
-              <th>Email</th>
-              <th>Cliente</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paged.length === 0 ? (
-              <tr>
-                <td colSpan={6} style={{ textAlign: 'center', color: '#888', fontSize: 16, padding: 24 }}>
-                  No hay resultados para mostrar.
-                </td>
-              </tr>
-            ) : (
-              paged.map(c => (
-                <tr key={c.id}>
-                  <td>{c.id}</td>
-                  <td>{c.nombre}</td>
-                  <td>{c.telefono}</td>
-                  <td>{c.email}</td>
-                  <td>{clientes.find(cl => cl.id === c.cliente_id)?.nombre || ''}</td>
-                  <td>
-                    <button className="btn" onClick={() => openEditModal(c)} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0}>Editar</button>{' '}
-                    <button className="btn" onClick={() => handleDelete(c.id)} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0}>Eliminar</button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 18 }}>
-          <button className="btn" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} title="Página anterior" aria-label="Página anterior" tabIndex={0}>&lt;</button>
-          <span style={{ fontWeight: 600, fontSize: 15 }}>Página {page} de {totalPages}</span>
-          <button className="btn" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} title="Página siguiente" aria-label="Página siguiente" tabIndex={0}>&gt;</button>
-        </div>
-      </div>
+// ...existing code...
+// ...existing code...
 

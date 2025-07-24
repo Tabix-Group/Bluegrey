@@ -117,6 +117,7 @@ export default function CronogramasPage() {
   // Búsqueda y paginación con useMemo para evitar errores de referencia
   const { filtered, paged, totalPages } = React.useMemo(() => {
     let filtered = [];
+    let paged = [];
     let totalPages = 1;
     if (Array.isArray(cronogramas)) {
       filtered = cronogramas.filter(c =>
