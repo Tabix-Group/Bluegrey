@@ -19,6 +19,7 @@ export const createModeloMensaje = async (modelo) => {
   return rows[0];
 };
 
+
 export const updateModeloMensaje = async (id, modelo) => {
   const { categoria, texto_base } = modelo;
   const { rows } = await pool.query(
@@ -27,6 +28,8 @@ export const updateModeloMensaje = async (id, modelo) => {
   );
   return rows[0];
 };
+
+
 
 export const deleteModeloMensaje = async (id) => {
   await pool.query('DELETE FROM modelos_mensaje WHERE id = $1', [id]);
