@@ -203,12 +203,12 @@ export default function CronogramasPage() {
             </tr>
           </thead>
           <tbody>
-            {paged.length === 0 ? (
+            {(Array.isArray(paged) && paged.length === 0) ? (
               <tr>
                 <td colSpan={8} className="table-cell text-center text-muted">No hay resultados para mostrar.</td>
               </tr>
             ) : (
-              paged.map(c => (
+              (Array.isArray(paged) ? paged : []).map(c => (
                 <tr key={c.id} className="table-row">
                   <td className="table-cell">{c.id}</td>
                   <td className="table-cell">{c.nombre}</td>
