@@ -1,4 +1,3 @@
-
 /* --- Design Tokens: Unificados con index.css para máxima consistencia --- */
 :root {
   --color-primary: #0052cc;
@@ -433,7 +432,7 @@ input::placeholder, textarea::placeholder {
 .app-content {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 100px auto 0 auto; /* Deja espacio para la navbar fija */
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
