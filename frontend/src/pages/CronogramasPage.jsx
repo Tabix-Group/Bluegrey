@@ -4,12 +4,14 @@
 import React, { useState, useEffect } from 'react';
 import CustomModal from '../components/CustomModal';
 import { getCronogramas, createCronograma, deleteCronograma, updateCronograma } from '../services/cronogramasService';
+import { getClientes } from '../services/clientesService';
 
 
 const pageBtnStyle = { background: '#eee', color: '#333', border: 'none', borderRadius: 8, padding: '7px 16px', fontWeight: 600, fontSize: 15, cursor: 'pointer' };
 
 export default function CronogramasPage() {
   const [cronogramas, setCronogramas] = useState([]);
+  const [clientes, setClientes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ nombre: '', descripcion: '', cliente_id: '', fecha_inicio: '', recurrencia: 'diaria', activo: true });
   const [editId, setEditId] = useState(null);
@@ -22,10 +24,14 @@ export default function CronogramasPage() {
 
   useEffect(() => {
     cargarCronogramas();
+    cargarClientes();
   }, []);
 
   async function cargarCronogramas() {
     setCronogramas(await getCronogramas());
+  }
+  async function cargarClientes() {
+    setClientes(await getClientes());
   }
 
   function openAddModal() {
@@ -151,12 +157,21 @@ export default function CronogramasPage() {
           {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
           <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del cronograma" aria-label="Nombre del cronograma" tabIndex={0} />
           <input placeholder="Descripción" value={form.descripcion} onChange={e => setForm(f => ({ ...f, descripcion: e.target.value }))} style={inputStyle} title="Descripción del cronograma" aria-label="Descripción del cronograma" tabIndex={0} />
-          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="ID del cliente asociado" aria-label="ID del cliente asociado" tabIndex={0} />
+          <select required value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="Cliente asociado" aria-label="Cliente asociado" tabIndex={0}>
+            <option value="">Seleccionar cliente...</option>
+            {clientes.map(c => (
+              <option key={c.id} value={c.id}>{c.nombre} (ID: {c.id})</option>
+            ))}
+          </select>
           <input required type="date" placeholder="Fecha de inicio" value={form.fecha_inicio} onChange={e => setForm(f => ({ ...f, fecha_inicio: e.target.value }))} style={inputStyle} title="Fecha de inicio" aria-label="Fecha de inicio" tabIndex={0} />
           <select value={form.recurrencia} onChange={e => setForm(f => ({ ...f, recurrencia: e.target.value }))} style={inputStyle} title="Recurrencia" aria-label="Recurrencia" tabIndex={0}>
             <option value="diaria">Diaria</option>
             <option value="semanal">Semanal</option>
             <option value="mensual">Mensual</option>
+            <option value="bimestral">Bimestral</option>
+            <option value="trimestral">Trimestral</option>
+            <option value="cuatrimestral">Cuatrimestral</option>
+            <option value="semestral">Semestral</option>
           </select>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15 }} title="¿Está activo?" aria-label="¿Está activo?">
             <input type="checkbox" checked={form.activo} onChange={e => setForm(f => ({ ...f, activo: e.target.checked }))} tabIndex={0} /> Activo
@@ -175,7 +190,7 @@ export default function CronogramasPage() {
               <th style={thStyle} scope="col">ID</th>
               <th style={thStyle} scope="col">Nombre</th>
               <th style={thStyle} scope="col">Descripción</th>
-              <th style={thStyle} scope="col">Cliente ID</th>
+              <th style={thStyle} scope="col">Cliente</th>
               <th style={thStyle} scope="col">Fecha inicio</th>
               <th style={thStyle} scope="col">Recurrencia</th>
               <th style={thStyle} scope="col">Activo</th>
@@ -195,7 +210,7 @@ export default function CronogramasPage() {
                   <td style={tdStyle}>{c.id}</td>
                   <td style={tdStyle}>{c.nombre}</td>
                   <td style={tdStyle}>{c.descripcion}</td>
-                  <td style={tdStyle}>{c.cliente_id}</td>
+                  <td style={tdStyle}>{(clientes.find(cl => cl.id === c.cliente_id)?.nombre) || c.cliente_id}</td>
                   <td style={tdStyle}>{c.fecha_inicio ? c.fecha_inicio.slice(0, 10) : ''}</td>
                   <td style={tdStyle}>{c.recurrencia}</td>
                   <td style={tdStyle}>{c.activo ? 'Sí' : 'No'}</td>

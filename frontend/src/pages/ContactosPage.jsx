@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getContactos, createContacto, deleteContacto, updateContacto } from '../services/contactosService';
+import { getClientes } from '../services/clientesService';
 import CustomModal from '../components/CustomModal';
 // Estilos únicos (deben estar antes del componente para estar disponibles)
 const inputStyle = {
@@ -59,26 +60,31 @@ const pageBtnStyle = { background: '#eee', color: '#333', border: 'none', border
 export default function ContactosPage() {
   const [contactos, setContactos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ nombre: '', telefono: '', email: '', cliente_id: '', otros_datos: '' });
+  const [form, setForm] = useState({ nombre: '', telefono: '', email: '', cliente_id: '' });
   const [editId, setEditId] = useState(null);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const [clientes, setClientes] = useState([]);
   const pageSize = 8;
 
   useEffect(() => {
     cargarContactos();
+    cargarClientes();
   }, []);
 
   async function cargarContactos() {
     setContactos(await getContactos());
   }
+  async function cargarClientes() {
+    setClientes(await getClientes());
+  }
 
   function openAddModal() {
     setEditId(null);
-    setForm({ nombre: '', telefono: '', email: '', cliente_id: '', otros_datos: '' });
+    setForm({ nombre: '', telefono: '', email: '', cliente_id: '' });
     setFormError('');
     setFormSuccess('');
     setModalOpen(true);
@@ -90,8 +96,7 @@ export default function ContactosPage() {
       nombre: contacto.nombre,
       telefono: contacto.telefono,
       email: contacto.email || '',
-      cliente_id: contacto.cliente_id || '',
-      otros_datos: contacto.otros_datos ? JSON.stringify(contacto.otros_datos) : ''
+      cliente_id: contacto.cliente_id || ''
     });
     setFormError('');
     setFormSuccess('');
@@ -101,7 +106,7 @@ export default function ContactosPage() {
   function closeModal() {
     setModalOpen(false);
     setEditId(null);
-    setForm({ nombre: '', telefono: '', email: '', cliente_id: '', otros_datos: '' });
+    setForm({ nombre: '', telefono: '', email: '', cliente_id: '' });
     setFormError('');
     setFormSuccess('');
     setLoading(false);
@@ -110,11 +115,8 @@ export default function ContactosPage() {
   function validateForm() {
     if (!form.nombre.trim()) return 'El nombre es obligatorio.';
     if (!form.telefono.trim()) return 'El teléfono es obligatorio.';
-    if (!form.cliente_id.trim() || isNaN(Number(form.cliente_id))) return 'Cliente ID es obligatorio y debe ser numérico.';
+    if (!form.cliente_id.trim() || isNaN(Number(form.cliente_id))) return 'Cliente es obligatorio.';
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) return 'El email no es válido.';
-    if (form.otros_datos) {
-      try { JSON.parse(form.otros_datos); } catch { return 'Otros datos debe ser JSON válido.'; }
-    }
     return '';
   }
 
@@ -129,7 +131,7 @@ export default function ContactosPage() {
     }
     setLoading(true);
     try {
-      const data = { ...form, cliente_id: Number(form.cliente_id), otros_datos: form.otros_datos ? JSON.parse(form.otros_datos) : null };
+      const data = { ...form, cliente_id: Number(form.cliente_id) };
       if (editId) {
         await updateContacto(editId, data);
         setFormSuccess('Contacto actualizado correctamente.');
@@ -206,8 +208,12 @@ export default function ContactosPage() {
           <input required placeholder="Nombre" value={form.nombre} onChange={e => setForm(f => ({ ...f, nombre: e.target.value }))} style={inputStyle} title="Nombre del contacto" aria-label="Nombre del contacto" tabIndex={0} />
           <input required placeholder="Teléfono" value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} style={inputStyle} title="Teléfono del contacto" aria-label="Teléfono del contacto" tabIndex={0} />
           <input placeholder="Email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} style={inputStyle} title="Email del contacto" aria-label="Email del contacto" tabIndex={0} />
-          <input required placeholder="Cliente ID" value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="ID del cliente asociado" aria-label="ID del cliente asociado" tabIndex={0} />
-          <input placeholder="Otros datos (JSON)" value={form.otros_datos} onChange={e => setForm(f => ({ ...f, otros_datos: e.target.value }))} style={inputStyle} title="Otros datos en formato JSON" aria-label="Otros datos en formato JSON" tabIndex={0} />
+          <select required value={form.cliente_id} onChange={e => setForm(f => ({ ...f, cliente_id: e.target.value }))} style={inputStyle} title="Cliente asociado" aria-label="Cliente asociado" tabIndex={0}>
+            <option value="">Seleccionar cliente...</option>
+            {clientes.map(c => (
+              <option key={c.id} value={c.id}>{c.nombre} (ID: {c.id})</option>
+            ))}
+          </select>
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
             <button type="submit" style={{...submitBtnStyle, background:'#0056b3'}} disabled={loading} title={editId ? 'Actualizar contacto' : 'Agregar contacto'} aria-label={editId ? 'Actualizar contacto' : 'Agregar contacto'} tabIndex={0}>{loading ? 'Guardando...' : (editId ? 'Actualizar' : 'Agregar')}</button>
             <button type="button" onClick={closeModal} style={cancelBtnStyle} disabled={loading} title="Cancelar" aria-label="Cancelar" tabIndex={0}>Cancelar</button>
@@ -223,8 +229,7 @@ export default function ContactosPage() {
               <th style={thStyle} scope="col">Nombre</th>
               <th style={thStyle} scope="col">Teléfono</th>
               <th style={thStyle} scope="col">Email</th>
-              <th style={thStyle} scope="col">Cliente ID</th>
-              <th style={thStyle} scope="col">Otros datos</th>
+              <th style={thStyle} scope="col">Cliente</th>
               <th style={thStyle} scope="col">Acciones</th>
             </tr>
           </thead>
@@ -242,8 +247,7 @@ export default function ContactosPage() {
                   <td style={tdStyle}>{c.nombre}</td>
                   <td style={tdStyle}>{c.telefono}</td>
                   <td style={tdStyle}>{c.email}</td>
-                  <td style={tdStyle}>{c.cliente_id}</td>
-                  <td style={tdStyle}><pre style={{ margin: 0, fontSize: 13 }}>{c.otros_datos ? JSON.stringify(c.otros_datos, null, 2) : ''}</pre></td>
+                  <td style={tdStyle}>{(clientes.find(cl => cl.id === c.cliente_id)?.nombre) || c.cliente_id}</td>
                   <td style={tdStyle}>
                     <button onClick={() => openEditModal(c)} style={editBtnStyle} disabled={loading} title="Editar contacto" aria-label="Editar contacto" tabIndex={0}>Editar</button>{' '}
                     <button onClick={() => handleDelete(c.id)} style={deleteBtnStyle} disabled={loading} title="Eliminar contacto" aria-label="Eliminar contacto" tabIndex={0}>Eliminar</button>

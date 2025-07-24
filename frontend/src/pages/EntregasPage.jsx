@@ -1,16 +1,23 @@
 
 
 // Estilos únicos (deben estar antes del componente para estar disponibles)
+
 import React, { useState, useEffect } from 'react';
 
 const pageBtnStyle = { background: '#eee', color: '#333', border: 'none', borderRadius: 8, padding: '7px 16px', fontWeight: 600, fontSize: 15, cursor: 'pointer' };
+
 import CustomModal from '../components/CustomModal';
 import { getEntregas, createEntrega, deleteEntrega, updateEntrega } from '../services/entregasService';
+import { getProductos } from '../services/productosService';
+import { getCronogramas } from '../services/cronogramasService';
+
 
 
 
 export default function EntregasPage() {
   const [entregas, setEntregas] = useState([]);
+  const [productos, setProductos] = useState([]);
+  const [cronogramas, setCronogramas] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ cronograma_id: '', fecha_entrega: '', producto_id: '', estado: 'pendiente' });
   const [editId, setEditId] = useState(null);
@@ -21,12 +28,21 @@ export default function EntregasPage() {
   const [page, setPage] = useState(1);
   const pageSize = 8;
 
+
   useEffect(() => {
     cargarEntregas();
+    cargarProductos();
+    cargarCronogramas();
   }, []);
 
   async function cargarEntregas() {
     setEntregas(await getEntregas());
+  }
+  async function cargarProductos() {
+    setProductos(await getProductos());
+  }
+  async function cargarCronogramas() {
+    setCronogramas(await getCronogramas());
   }
 
   function openAddModal() {
@@ -150,9 +166,23 @@ export default function EntregasPage() {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, position: 'relative' }} aria-label="Formulario de entrega">
           {formError && <div style={{ color: '#dc3545', background: '#fff0f0', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formError}</div>}
           {formSuccess && <div style={{ color: '#28a745', background: '#eafbe7', borderRadius: 6, padding: '8px 12px', fontSize: 15 }}>{formSuccess}</div>}
-          <input required placeholder="Cronograma ID" value={form.cronograma_id} onChange={e => setForm(f => ({ ...f, cronograma_id: e.target.value }))} style={inputStyle} title="ID del cronograma asociado" aria-label="ID del cronograma asociado" tabIndex={0} />
+          <select required value={form.cronograma_id} onChange={e => setForm(f => ({ ...f, cronograma_id: e.target.value }))} style={inputStyle} title="Cronograma asociado" aria-label="Cronograma asociado" tabIndex={0}>
+            <option value="">Seleccionar cronograma...</option>
+            {cronogramas.map(c => (
+              <option key={c.id} value={c.id}>
+                {c.id} - {c.nombre || c.descripcion || 'Sin nombre'}
+              </option>
+            ))}
+          </select>
           <input required type="date" placeholder="Fecha de entrega" value={form.fecha_entrega} onChange={e => setForm(f => ({ ...f, fecha_entrega: e.target.value }))} style={inputStyle} title="Fecha de la entrega" aria-label="Fecha de la entrega" tabIndex={0} />
-          <input required placeholder="Producto ID" value={form.producto_id} onChange={e => setForm(f => ({ ...f, producto_id: e.target.value }))} style={inputStyle} title="ID del producto entregado" aria-label="ID del producto entregado" tabIndex={0} />
+          <select required value={form.producto_id} onChange={e => setForm(f => ({ ...f, producto_id: e.target.value }))} style={inputStyle} title="Producto entregado" aria-label="Producto entregado" tabIndex={0}>
+            <option value="">Seleccionar producto...</option>
+            {productos.map(p => (
+              <option key={p.id} value={p.id}>
+                {p.id} - {p.nombre || p.descripcion || 'Sin nombre'}
+              </option>
+            ))}
+          </select>
           <select value={form.estado} onChange={e => setForm(f => ({ ...f, estado: e.target.value }))} style={inputStyle} title="Estado de la entrega" aria-label="Estado de la entrega" tabIndex={0}>
             <option value="pendiente">Pendiente</option>
             <option value="enviado">Enviado</option>
