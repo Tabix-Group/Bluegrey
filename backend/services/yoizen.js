@@ -6,7 +6,7 @@ const TOKEN = process.env.YOIZEN_TOKEN;
 
 // Enviar mensaje de texto por WhatsApp
 export async function enviarMensajeWhatsApp(numero, mensaje) {
-  const url = `${BASE_URL}/v2/lines/${LINE_CODE}/messages`;
+  const url = `${BASE_URL}/api/v1/${LINE_CODE}/message`;
   const payload = {
     to: numero,
     type: 'text',
