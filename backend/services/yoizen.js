@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 const BASE_URL = process.env.YOIZEN_BASE_URL;
-const LINE_CODE = process.env.YOIZEN_LINE_CODE || process.env.YOIZEN_LINE_ID;
+const WAID = process.env.YOIZEN_WAID;
 const TOKEN = process.env.YOIZEN_TOKEN;
 
 // Enviar mensaje de texto por WhatsApp
 export async function enviarMensajeWhatsApp(numero, mensaje) {
-  const url = `${BASE_URL}/api/v1/${LINE_CODE}/message`;
+  const url = `${BASE_URL}/api/v1/${WAID}/message`;
   const payload = {
     to: numero,
     type: 'text',
