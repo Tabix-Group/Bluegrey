@@ -1,6 +1,5 @@
 // ...existing code...
 import yoizenWebhookRouter from './routes/yoizen_webhook.js';
-app.use('/api', yoizenWebhookRouter);
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -51,6 +50,8 @@ app.use('/api/modelos-mensaje', modelosMensajeRouter);
 app.use('/api/usuarios', usuariosRouter);
 
 app.use('/api/wa', waRouter);
+
+app.use('/api', yoizenWebhookRouter);
 
 // Tarea programada diaria a las 08:00
 cron.schedule('0 8 * * *', async () => {
