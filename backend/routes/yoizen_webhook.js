@@ -4,7 +4,7 @@ import { enviarMensajeWhatsApp } from '../services/yoizen.js';
 const router = express.Router();
 
 // Webhook para recibir mensajes entrantes de Yoizen
-router.post('/webhook/yoizen', async (req, res) => {
+router.post('/webhook', async (req, res) => {
   try {
     const evento = req.body;
     // Procesa solo si hay mensajes
