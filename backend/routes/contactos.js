@@ -1,4 +1,5 @@
 import * as Contactos from '../models/contactos.js';
+import { enviarMensajeWhatsApp } from '../services/yoizen.js';
 import express from 'express';
 const router = express.Router();
 
@@ -19,6 +20,13 @@ router.post('/', async (req, res) => {
   const { error } = contactoSchema.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
   const data = await Contactos.createContacto(req.body);
+  if (data && data.telefono) {
+    try {
+      await enviarMensajeWhatsApp(data.telefono, 'Hola, te escribimos desde NeoSalud para coordinar tu entrega, en las próximas horas recibiras un nuevo mensaje con el detalle de tu pedido');
+    } catch (err) {
+      console.error('Error enviando WhatsApp al contacto:', err.message);
+    }
+  }
   res.status(201).json(data);
 });
 
