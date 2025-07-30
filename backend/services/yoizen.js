@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = process.env.YOIZEN_BASE_URL;
-const LINE_CODE = process.env.YOIZEN_LINE_CODE;
+const LINE_CODE = process.env.YOIZEN_LINE_CODE || process.env.YOIZEN_LINE_ID;
 const TOKEN = process.env.YOIZEN_TOKEN;
 
 // Enviar mensaje de texto por WhatsApp
@@ -16,6 +16,16 @@ export async function enviarMensajeWhatsApp(numero, mensaje) {
     Authorization: `Bearer ${TOKEN}`,
     'Content-Type': 'application/json'
   };
-  const { data } = await axios.post(url, payload, { headers });
-  return data;
+  try {
+    const { data } = await axios.post(url, payload, { headers });
+    console.log('[Yoizen] Mensaje enviado OK:', JSON.stringify(data));
+    return data;
+  } catch (err) {
+    if (err.response) {
+      console.error('[Yoizen] Error respuesta:', err.response.status, err.response.data);
+    } else {
+      console.error('[Yoizen] Error request:', err.message);
+    }
+    throw err;
+  }
 }
