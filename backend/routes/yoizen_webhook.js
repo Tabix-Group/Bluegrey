@@ -6,6 +6,7 @@ const router = express.Router();
 // Webhook para recibir mensajes entrantes de Yoizen
 router.post('/webhook', async (req, res) => {
   try {
+    console.log('Webhook recibido:', JSON.stringify(req.body));
     const evento = req.body;
     // Procesa solo si hay mensajes
     if (evento.messages && evento.messages[0]) {
@@ -19,6 +20,7 @@ router.post('/webhook', async (req, res) => {
     }
     res.sendStatus(200);
   } catch (err) {
+    console.error('Error en webhook:', err);
     res.status(500).json({ error: err.message });
   }
 });
