@@ -31,8 +31,16 @@ router.post('/', async (req, res) => {
     // Buscar el primer contacto asociado
     const contacto = await Contactos.getPrimerContactoByClienteId(data.id);
     if (contacto && contacto.telefono) {
+      // Normalizar número a formato internacional (Argentina)
+      let numero = contacto.telefono.trim();
+      if (/^11\d{8}$/.test(numero)) {
+        numero = '54' + numero;
+      } else if (/^\d{10}$/.test(numero) && numero.startsWith('15')) {
+        // Si empieza con 15, lo cambiamos a 11 (caso celulares viejos)
+        numero = '5411' + numero.slice(2);
+      }
       try {
-        await enviarMensajeWhatsApp(contacto.telefono, 'Hola, te escribimos desde NeoSalud para coordinar tu entrega, en las próximas horas recibiras un nuevo mensaje con el detalle de tu pedido');
+        await enviarMensajeWhatsApp(numero, 'Hola, te escribimos desde NeoSalud para coordinar tu entrega, en las próximas horas recibiras un nuevo mensaje con el detalle de tu pedido');
       } catch (err) {
         console.error('Error enviando WhatsApp al contacto:', err.message);
       }
