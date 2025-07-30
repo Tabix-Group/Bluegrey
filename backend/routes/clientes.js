@@ -1,4 +1,6 @@
 import * as Clientes from '../models/clientes.js';
+import * as Contactos from '../models/contactos.js';
+import { enviarMensajeWhatsApp } from '../services/yoizen.js';
 import express from 'express';
 const router = express.Router();
 
@@ -26,6 +28,15 @@ router.post('/', async (req, res) => {
   }
   try {
     const data = await Clientes.createCliente({ nombre, direccion, categoria });
+    // Buscar el primer contacto asociado
+    const contacto = await Contactos.getPrimerContactoByClienteId(data.id);
+    if (contacto && contacto.telefono) {
+      try {
+        await enviarMensajeWhatsApp(contacto.telefono, 'Hola, te escribimos desde NeoSalud para coordinar tu entrega, en las próximas horas recibiras un nuevo mensaje con el detalle de tu pedido');
+      } catch (err) {
+        console.error('Error enviando WhatsApp al contacto:', err.message);
+      }
+    }
     res.status(201).json(data);
   } catch (err) {
     res.status(500).json({ error: 'Error al crear cliente' });

@@ -1,3 +1,7 @@
+export const getPrimerContactoByClienteId = async (cliente_id) => {
+  const { rows } = await pool.query('SELECT * FROM contactos WHERE cliente_id = $1 ORDER BY id ASC LIMIT 1', [cliente_id]);
+  return rows[0];
+};
 import pool from './db.js';
 
 export const getAllContactos = async () => {
