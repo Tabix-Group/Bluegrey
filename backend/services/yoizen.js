@@ -16,11 +16,13 @@ export async function enviarMensajeWhatsApp(numero, mensaje) {
     Authorization: `Bearer ${TOKEN}`,
     'Content-Type': 'application/json'
   };
+  console.log('[Yoizen] Intentando enviar:', JSON.stringify(payload), 'a', url);
   try {
     const { data } = await axios.post(url, payload, { headers });
     console.log('[Yoizen] Mensaje enviado OK:', JSON.stringify(data));
     return data;
   } catch (err) {
+    console.error('[Yoizen] ERROR ENVIANDO MENSAJE:', err);
     if (err.response) {
       console.error('[Yoizen] Error respuesta:', err.response.status, JSON.stringify(err.response.data));
       console.error('[Yoizen] Error headers:', JSON.stringify(err.response.headers));
