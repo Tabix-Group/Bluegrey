@@ -22,9 +22,12 @@ export async function enviarMensajeWhatsApp(numero, mensaje) {
     return data;
   } catch (err) {
     if (err.response) {
-      console.error('[Yoizen] Error respuesta:', err.response.status, err.response.data);
+      console.error('[Yoizen] Error respuesta:', err.response.status, JSON.stringify(err.response.data));
+      console.error('[Yoizen] Error headers:', JSON.stringify(err.response.headers));
+    } else if (err.request) {
+      console.error('[Yoizen] Error request:', err.message, err.request);
     } else {
-      console.error('[Yoizen] Error request:', err.message);
+      console.error('[Yoizen] Error general:', err.message);
     }
     throw err;
   }
